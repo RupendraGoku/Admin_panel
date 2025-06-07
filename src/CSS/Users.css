@@ -1,0 +1,291 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Wrapper that covers full available space on right */
+.users-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px 30px;
+  border-radius: 4px;
+  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
+  min-height: 30%; /* Adjust based on your header + footer height */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Breadcrumb-like container if needed */
+.breadcrumb-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e1e4eb;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+
+.breadcrumb-left h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.breadcrumb-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.breadcrumb-item {
+  color: #111827;
+  font-weight: 500;
+}
+
+.breadcrumb-separator,
+.breadcrumb-current {
+  color: #9ca3af;
+}
+
+/* Header Section */
+.users-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.users-header-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.add-user-btn {
+  background-color: #4054b2;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 120px;
+}
+
+.add-user-btn:hover {
+  background-color: #2f4dcf;
+}
+
+/* Tools Section */
+.users-tools {
+  margin-bottom: 10px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.export-buttons,
+.pagination-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.export-buttons button,
+.pagination-buttons button {
+  padding: 6px 12px;
+  border: 1px solid #ccd1d9;
+  background-color: #eff2f7;
+  cursor: pointer;
+  border-radius: 2px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.export-buttons button:hover,
+.pagination-buttons button:hover {
+  background-color: #e4e4e4;
+}
+
+/* Search box */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.srch {
+  margin-top: -12px;
+}
+
+.search-box input {
+  width: 160px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Table */
+.users-table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table thead {
+  background-color: #f1f3f5;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #ddd;
+  font-size: 14px;
+  text-align: left;
+  padding: 12px 10px;
+}
+
+.users-table th {
+  font-weight: 600;
+  position: relative;
+  white-space: nowrap;
+  text-align: left;
+  padding-right: 30px; /* Make space for arrows */
+}
+
+th {
+  position: relative;
+  text-align: left;
+}
+
+/* Sort arrows */
+.sort-arrows {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.arrow {
+  border: none;
+  background: none;
+  font-size: 13px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  height: 10px;
+  cursor: pointer;
+}
+
+.arrow.up {
+  color: #888;
+  padding-bottom: 20px;
+}
+
+.arrow.down {
+  color: #888;
+  padding-top: 5px;
+}
+
+/* Empty row style */
+.no-data {
+  text-align: center;
+  font-weight: 600;
+  color: #555;
+  height: 10rem;
+}
+
+/* Footer */
+.users-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 0px;
+}
+@media only screen and (max-width: 768px) {
+  .users-wrapper {
+    padding: 15px 20px;
+  }
+
+  .users-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .add-user-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .export-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .export-buttons button {
+    flex: 1 1 40%;
+    min-width: 100px;
+  }
+
+  .search-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .users-table-container {
+    overflow-x: auto;
+  }
+
+  .users-table {
+    width: 1000px; /* Keeps wide structure for scrolling */
+    font-size: 14px;
+  }
+
+  .users-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .pagination-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pagination-buttons button {
+    flex: 1 1 45%;
+  }
+}

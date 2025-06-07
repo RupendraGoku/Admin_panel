@@ -1,0 +1,156 @@
+/* Keep your existing global styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar.css */
+.navbar,
+.first-part { transition: width .25s ease; }
+
+.navbar.collapsed {
+  width: 70px !important;
+  padding: 20px 8px; /* make the icon column look tighter */
+}
+
+.navbar.collapsed .logo-text {
+  text-align: center;
+}
+
+.navbar {
+  width: 15.61rem; /* Already set by you */
+  height: 100vh;
+  flex-shrink: 0;
+  background-color: #405189;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.logo1 {
+  height: 17px;
+  margin-top: 8px;
+}
+
+.highlight {
+  color: #f7c325;
+}
+
+.menu-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: inherit;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  margin-top: -5px;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+/* Important: Remove flex from .menu-item since NavLink will handle it */
+.menu-item {
+  padding: 8px 0;
+}
+
+/* Style NavLink inside menu-item */
+.menu-item a {
+  display: flex;               /* Make the entire link a flex container */
+  align-items: center;
+  gap: 12px;
+  color: #a0a9d1;
+  text-decoration: none;
+  font-size: 16px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.menu-item a:hover {
+  color: #ffffff;
+  background-color: transparent;
+}
+
+.menu-item a.active {
+  color: #ffffff;
+  font-weight: bold;
+  background-color: transparent;
+}
+
+.icon {
+  font-size: 17px;
+}
+
+a.active {
+  color: white;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    width: 240px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar.collapsed {
+    transform: translateX(0); /* show sidebar */
+  }
+
+  .navbar .logo {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .menu-title {
+    font-size: 12px;
+  }
+
+  .menu-item {
+    padding: 10px 15px;
+    font-size: 15px;
+  }
+
+  .menu-item a {
+    display: flex;
+  }
+
+  /* Optional: dim background when menu is open */
+  .mobile-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 998;
+  }
+}

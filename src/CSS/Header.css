@@ -1,0 +1,170 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  /* padding-left:1% ;  
+  padding-right: 1%; */
+  padding-left: 25px;
+  align-items: center;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-icon {
+  font-size: 20px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #f1f3f9;
+  padding-left: 15px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 4px;
+  gap: 6px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #4b5563;
+  width:max-content;
+  
+}
+
+.search-icon {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.flag-icon {
+  width: 24px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.header-icon {
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.icon-badge {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  font-size: 10px;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+.badge.blue {
+  background-color: #3b82f6;
+}
+
+.badge.red {
+  background-color: #ef4444;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  background-color: #F3F3F9;
+  height:70px;
+  padding: 0px 15px;
+  margin-right: 20px;
+  border-radius: 1px;
+  gap: 10px;
+  
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  /* line-height: 1.2; */
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #9ca3af;
+}
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+    gap: 10px;
+  }
+
+  .header-left,
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .header-left {
+    gap: 10px;
+  }
+
+  .search-box {
+    flex: 1;
+    padding: 0px 10px;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .header-right {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .user-profile {
+    display: none; /* Optional: Hide profile info on small screens */
+  }
+
+  .menu-icon {
+    font-size: 24px;
+  }
+}

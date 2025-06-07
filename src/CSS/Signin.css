@@ -1,0 +1,457 @@
+
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('/fonts/materialdesignicons-webfont9445.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  font-family: 'MyCustomFont', sans-serif;
+
+ 
+}
+
+
+.mainScreen {
+    background: #0BB19C;
+background: linear-gradient(113deg,rgba(11, 177, 156, 1) 0%, rgba(64, 81, 137, 1) 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
+.mainCont {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    width: 100%;
+    max-width: 800px; /* Constrain the width */
+    box-sizing: border-box;
+    margin-right: 20%;
+    margin-bottom: 6%;
+}
+
+.imgSection {
+    background-image: url(../Images/authonebg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 70%;
+    background-color: white;
+    border-radius: 8px;
+    height: 420px;
+    width: 540px;
+    box-sizing: border-box;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    position: relative; /* ✅ Add this line */
+    overflow: hidden;   /* Optional: Ensures .overlay doesn't overflow */
+}
+
+.SignInSection, .form-container {
+    background-color: white;
+    border-radius: 8px;
+    height: 420px;
+        width: 540px;
+    padding: 15px;
+    box-sizing: border-box;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    
+
+}
+
+
+h2 {
+    color: #2E3A59;
+    font-size: 18px;
+    margin-bottom: 10px;
+        margin-left: 30px;
+
+}
+
+p {
+    color: #6c757d;
+    font-size: 13px;
+    margin-bottom: 30px;
+        margin-left: 30px;
+
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #2E3A59;
+}
+
+input[type="text"],
+input[type="password"]
+ {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+#password{
+width: 80%;
+
+}
+
+.password-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #6c757d;
+    font-size: 14px;
+    text-align: end;
+    margin-right: 20px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-top: -20px;
+}
+
+.remember-me label {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #2E3A59;
+}
+
+button {
+    padding: 10px;
+    width: 90%;
+    background-color: #00b894;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bt1{
+        margin-top: 5%;
+
+}
+.bt1:hover{
+    background-color: #019875;
+
+}
+.eyeIcon{
+    height: 15px;
+    width: 15px;
+    padding-bottom:15px ;
+    margin-left: 80%;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+    width: 100%;
+    padding-right: 60px; /* Adjust padding to give space for the button */
+}
+
+.show-password-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #00b894;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+}
+
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(78, 93, 140, 0.9);
+  color: white;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.logo1 {
+  height: 20px;
+  margin: 16px;
+  align-self: flex-start; /* ✅ Stick to top-left */
+}
+
+.overlay-text {
+  font-size: 1.1rem;
+  color: rgb(189, 183, 183);
+  max-width: 85%;
+  transition: opacity 0.5s ease-in-out;
+    margin-top: 40%;
+    margin-left: 14%;
+    padding-bottom: 10%;
+
+
+}
+
+.sliders {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.slider-dot {
+  width: 30px;
+  height: 2px;
+  background-color: #fff;
+  opacity: 0.4;
+  transition: all 0.3s;
+}
+
+.slider-dot.active {
+  opacity: 1;
+  background-color: #fff;
+  transform: scale(1.2);
+}
+
+@media (max-width: 600px) {
+     body, html {
+    overflow-x: hidden;
+  }
+  .mainCont {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+margin-right: 0;
+    width: 100vw;
+    height: 64vh;
+  }
+
+  .imgSection {
+    width: 100%;
+    height: 32vh;
+    border-radius: 0;
+    border-top-right-radius:8px;
+    border-bottom-left-radius:0px;
+  }
+   .SignInSection {
+    width: 100%;
+    height: 32vh;
+    border-radius: 0;
+  }
+
+  .SignInSection {
+    padding: 10px 15px;
+    overflow-y: auto; /* 🛠 Ensure scroll if needed */
+  }
+
+  h2 {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+
+  p {
+    font-size: 12px;
+    margin-left: 10px;
+    margin-bottom: 15px;
+  }
+
+  form {
+    margin-left: 10px;
+  }
+
+  label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: auto;
+    font-size: 12px;
+    padding: 8px;
+    margin-bottom: 14px;
+  }
+
+  .remember-me label {
+    font-size: 12px;
+  }
+
+  .forgot-password {
+    font-size: 12px;
+  }
+
+  button {
+    font-size: 13px;
+    padding: 8px;
+    width: 100%;
+  }
+
+  .overlay-text {
+    font-size: 0.8rem;
+    margin-top: 25%;
+    margin-left: 8%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .mainCont {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 95%;
+    height: auto;
+  }
+
+  .imgSection {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px 8px 0 0;
+    background-position: center;
+  }
+
+  .overlay {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo1 {
+    width: 100px;
+    margin: 0 auto 10px;
+  }
+
+  .overlay-text {
+    font-size: 14px;
+    color: #fff;
+    margin-top: 10px;
+  }
+
+  .sliders {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 4px;
+  }
+
+  .SignInSection {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 0 0 8px 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .SignInSection h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .SignInSection p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .show-password-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .eyeIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .forgot-password {
+    font-size: 12px;
+    text-align: right;
+    display: block;
+    margin-top: -8px;
+  }
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .bt1 {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #0BB19C;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .bt1:hover {
+    background-color: #099c87;
+  }
+
+  .mainScreen {
+    position: relative;
+    height: auto;
+    padding: 20px 10px;
+    overflow-y: auto;
+  }
+}
+
