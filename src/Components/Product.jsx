@@ -1,107 +1,67 @@
-import "../CSS/product.css";
+import DataTable from "./DataTable";
+import "../CSS/DataTable.css";
+import "../CSS/Product.css";
 
-const Product = () => {
-  return (
-    <div className="product-wrapper">
-      <div className="product-container">
-        <div className="product-header">
-          <h2>Product Record</h2>
-          <button className="add-product-btn">
-            <i className="fas fa-cart-plus"></i> Add Product
-          </button>
-        </div>
+const productData = [
+  {
+    sno: 1,
+    name: "Headphone",
+    category: "Electronics",
+    brand: "Sony",
+    price: "$99",
+    status: "Active",
+    image: "/images/product1.png",
+  },
+];
 
-        <div className="button-row">
-          <div className="export-buttons">
-            <button>Copy</button>
-            <button>CSV</button>
-            <button>Excel</button>
-            <button>Print</button>
-            <button>PDF</button>
-          </div>
-          <div className="search-box">
-            <label htmlFor="search">Search:</label>
-            <input type="text" id="search" placeholder="Search..." />
-          </div>
-        </div>
+const productFields = [
+  { name: "name", label: "Name", type: "text", placeholder: "Product Name", required: true },
+  { name: "slug", label: "Slug", type: "text", placeholder: "Product Slug", required: true },
+  { name: "brand", label: "Brand", type: "select", options: ["Apple", "Samsung", "Nike"], required: true },
+  { name: "category", label: "Category", type: "select", options: ["Electronics", "Clothing"], required: true },
+  { name: "regularPrice", label: "Regular Price (₹)", type: "number", required: true },
+  { name: "sellingPrice", label: "Selling Price (₹)", type: "number", required: true },
+  { name: "image", label: "Image", type: "file", accept: ".jpg,.jpeg,.png", required: true },
+  { name: "gallery", label: "Upload Gallery", type: "file", multiple: true, accept: ".jpg,.jpeg,.png" },
+  {
+    name: "shortDescription", label: "Short Description", type: "textarea", placeholder: "Short Description", required: true
+  },
+  {
+    name: "longDescription", label: "Long Description", type: "textarea", placeholder: "Long Description"
+  },
+];
 
-        <div className="table-container">
-          <table className="product-table">
-            <thead>
-              <tr>
-                {[
-                  "Sno",
-                  "Name",
-                  "Category",
-                  "Brand",
-                  "Selling Price (₹)",
-                  "Status",
-                  "Action",
-                ].map((header) => (
-                  <th key={header}>
-                    {header}
-                    <span className="sort-arrows">
-                      <button className="arrow up">↑</button>
-                      <button className="arrow down">↓</button>
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[...Array(5)].map((_, i) => (
-                <tr key={i}>
-                  <td>{i + 1}</td>
-                  <td>
-                    <img
-                      src={`/images/product${i + 1}.png`}
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <span className="product-name">
-                      {
-                        [
-                          "Esssf",
-                          "Ssa",
-                          "Wireless Bluetooth Headphones",
-                          "Demo",
-                          "Demo Product",
-                        ][i]
-                      }
-                    </span>
-                  </td>
-                  <td>Acv</td>
-                  <td>Dremo</td>
-                  <td>{[80, 80, 80, 40, 80][i].toFixed(2)}</td>
-                  <td>
-                    <span
-                      className={`status-badge ${
-                        i === 0 ? "status-deactive" : "status-active"
-                      }`}
-                    >
-                      {i === 0 ? "Deactivate" : "Active"}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="action-btn">...</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
 
-        <div className="product-footer">
-          <div>Showing 1 to 5 of 5 entries</div>
-          <div className="pagination-buttons">
-            <button>Previous</button>
-            <button className="active">1</button>
-            <button>Next</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+const Product = () => (
+  <DataTable
+    title="Product Record"
+    addBtnLabel="Add Product"
+    addBtnIcon="fa-box"
+    headers={["Sno", "Name", "Category", "Brand", "Price", "Image", "Status", "Action"]}
+    data={productData}
+    cssClassPrefix="datatable"
+    renderRow={(item, i) => (
+      <tr key={i}>
+        <td>{item.sno}</td>
+        <td>{item.name}</td>
+        <td>{item.category}</td>
+        <td>{item.brand}</td>
+        <td>{item.price}</td>
+        <td>
+          <img src={item.image} alt={item.name} className="product-image" />
+        </td>
+        <td>
+          <span className={`status-badge ${item.status === "Active" ? "status-active" : "status-deactive"}`}>
+            {item.status}
+          </span>
+        </td>
+        <td>
+          <button className="action-btn">...</button>
+        </td>
+      </tr>
+    )}
+    modalFields={productFields}
+  />
+);
 
 export default Product;

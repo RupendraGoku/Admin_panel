@@ -1,64 +1,61 @@
-import "../CSS//Users.css";
+import DataTable from "./DataTable";
+import "../CSS/DataTable.css";
 
-const Users = () => {
-  return (
-    <div className="users-wrapper">
-      <div className="users-header-section">
-        <h2>Users Record</h2>
-        <button className="add-user-btn">
-          <i className="fas fa-user-plus"></i> Add User
-        </button>
-      </div>
+const userData = [
+  {
+    sno: 1,
+    name: "John Doe",
+    email: "john@example.com",
+    phone: "1234567890",
+    username: "johndoe",
+    role: "Admin",
+    status: "Active",
+  },
+];
 
-      <div className="users-tools">
-        <div className="button-row">
-          <div className="export-buttons">
-            <button>Copy</button>
-            <button>CSV</button>
-            <button>Excel</button>
-            <button>Print</button>
-            <button>PDF</button>
-          </div>
-          <div className="search-box">
-            <label className="srch">Search:</label>
-            <input type="text" placeholder="Search..." />
-          </div>
-        </div>
-      </div>
+const userFields = [
+  { label: "Name", name: "name", type: "text", required: true },        
+  { label: "Email", name: "email", type: "email", required: true },     
+  { label: "Phone", name: "phone", type: "text" },                      
+  { label: "Username", name: "username", type: "text", required: true },
+  {                                                                   
+    label: "Role",                                                     
+    name: "role",                                                      
+    type: "radio",                                                     
+    options: ["Admin", "User"],                                        
+    required: true,                                                    
+  },
+];
 
-      <div className="users-table-container">
-        <table className="users-table">
-          <thead className="thead">
-            <tr>
-              {["Sno", "Name", "Email", "Phone", "Username", "Role", "Status", "Action"].map((header) => (
-                <th key={header}>
-                  {header}
-                  <span className="sort-arrows">
-                    <button className="arrow up">↑</button>
-                    <button className="arrow down">↓</button>
-                  </span>
-                </th>
-              ))}
-            </tr>
-          </thead>
 
-          <tbody>
-            <tr>
-              <td colSpan="8" className="no-data">No data available in table</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className="users-footer">
-        <span>Showing 0 to 0 of 0 entries</span>
-        <div className="pagination-buttons">
-          <button>Previous</button>
-          <button>Next</button>
-        </div>
-      </div>
-    </div>
-  );
-};
+const Users = () => (
+  <DataTable
+    title="Users Record"
+    addBtnLabel="Add User"
+    addBtnIcon="fa-user-plus"
+    headers={["Sno", "Name", "Email", "Phone", "Username", "Role", "Status", "Action"]}
+    data={userData}
+    cssClassPrefix="datatable"
+    renderRow={(item, i) => (
+      <tr key={i}>
+        <td>{item.sno}</td>
+        <td>{item.name}</td>
+        <td>{item.email}</td>
+        <td>{item.phone}</td>
+        <td>{item.username}</td>
+        <td>{item.role}</td>
+        <td>
+          <span className={`status-badge ${item.status === "Active" ? "status-active" : "status-deactive"}`}>
+            {item.status}
+          </span>
+        </td>
+        <td>
+          <button className="action-btn">...</button>
+        </td>
+      </tr>
+    )}
+    modalFields={userFields}
+  />
+);
 
 export default Users;

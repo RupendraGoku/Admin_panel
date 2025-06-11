@@ -91,6 +91,17 @@
 .badge.red {
   background-color: #ef4444;
 }
+.clickable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clickable:hover {
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in-out;
+}
 
 .user-profile {
   display: flex;
@@ -141,6 +152,7 @@
     width: 100%;
     justify-content: space-between;
   }
+
 
   .header-left {
     gap: 10px;

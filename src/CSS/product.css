@@ -1,4 +1,4 @@
-/* Wrapper to stretch full width and height */
+/* Wrapper for full width and height */
 .product-wrapper {
   width: 100%;
   min-height: 100%;
@@ -10,7 +10,7 @@
   align-items: flex-start;
 }
 
-/* Container to hold entire product card, full width */
+/* Product Container */
 .product-container {
   width: 100%;
   max-width: 100%;
@@ -21,105 +21,10 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  min-height: 100%; /* stretch full viewport height */
+  min-height: 100%;
 }
 
-/* Header with title and button aligned */
-.product-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.product-header h2 {
-  font-size: 22px;
-  font-weight: 600;
-}
-
-/* Add product button styling */
-.add-product-btn {
-  background-color: #4054b2;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-}
-
-.add-product-btn i {
-  margin-right: 8px;
-}
-
-/* Button row with export and search */
-.button-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-
-/* Export buttons style */
-.export-buttons button {
-  padding: 6px 12px;
-  border: 1px solid #ccd1d9;
-  background-color: #eff2f7;
-  border-radius: 4px;
-  font-size: 14px;
-  margin-right: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.export-buttons button:hover {
-  background-color: #e0e5ec;
-}
-
-/* Search box styling */
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.search-box input {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-/* Table container with horizontal scroll on overflow */
-.table-container {
-  overflow-x: auto;
-  flex-grow: 1; /* Take available vertical space */
-}
-
-/* Product table styling */
-.product-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 15px;
-}
-
-.product-table th,
-.product-table td {
-  padding: 12px;
-  font-size: 14px;
-  border: 1px solid #dee2e6;
-  vertical-align: middle;
-  position: relative;
-  white-space: nowrap;
-}
-
-.product-table thead {
-  background-color: #f8f9fc;
-  font-weight: bold;
-}
-
+/* Product Image Styling */
 .product-image {
   width: 30px;
   height: 30px;
@@ -129,98 +34,17 @@
   vertical-align: middle;
 }
 
-/* Product name styling */
 .product-name {
   vertical-align: middle;
 }
 
-/* Status badges */
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-  display: inline-block;
-}
-
-.status-active {
-  background-color: #1cc88a;
-}
-
-.status-deactive {
-  background-color: #e74a3b;
-}
-
-/* Action button in table */
-.action-btn {
-  background-color: #e7f1ff;
-  border: none;
-  color: #1b4d89;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* Footer with pagination */
-.product-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: auto; /* Push footer to bottom if container is tall */
-}
-
-/* Pagination buttons style */
-.pagination-buttons button {
-  border: 1px solid #ccc;
-  background-color: #fff;
-  padding: 6px 12px;
-  margin: 0 4px;
-  border-radius: 3px;
-  color: #4054b2;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
+/* Pagination active button style override */
 .pagination-buttons .active {
   background-color: #4054b2;
   color: white;
 }
 
-.pagination-buttons button:hover:not(.active) {
-  background-color: #e0e5ec;
-}
-
-@media (max-width: 768px) {
-  .product-header,
-  .button-row,
-  .product-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .add-product-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .export-buttons {
-    flex-wrap: wrap;
-  }
-
-  .export-buttons button {
-    margin-bottom: 6px;
-  }
-
-  .search-box {
-    width: 100%;
-  }
-
-  .search-box input {
-    width: 100%;
-  }
+/* Footer wrapper */
+.product-footer {
+  margin-top: auto;
 }
