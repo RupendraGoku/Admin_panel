@@ -1,6 +1,6 @@
 import DataTable from "./DataTable";
 import "../CSS/DataTable.css";
-import "../CSS/Product.css";
+import "../CSS/product.css";
 
 const productData = [
   {
