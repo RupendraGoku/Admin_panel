@@ -14,18 +14,20 @@ const userData = [
 ];
 
 const userFields = [
-  { label: "Name", name: "name", type: "text", required: true },        
-  { label: "Email", name: "email", type: "email", required: true },     
-  { label: "Phone", name: "phone", type: "text" },                      
-  { label: "Username", name: "username", type: "text", required: true },
-  {                                                                   
-    label: "Role",                                                     
-    name: "role",                                                      
-    type: "radio",                                                     
-    options: ["Admin", "User"],                                        
-    required: true,                                                    
+  { label: "Name", name: "name", type: "text", required: true },
+  { label: "Email", name: "email", type: "email", required: true },
+  {
+    label: "Role",
+    name: "role",
+    type: "radio",
+    options: ["Admin", "User"],
+    required: true,
+    fullWidth: true, // 👈 key to make it take a full row
   },
+  { label: "Phone", name: "phone", type: "text" },
+  { label: "Username", name: "username", type: "text", required: true },
 ];
+
 
 
 const Users = () => (

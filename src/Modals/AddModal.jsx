@@ -104,9 +104,53 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     </div>
   );
 
+  // ✅ Smart layout handling: full-width fields break row, others grouped in 2s
+  const renderFieldsInRows = () => {
+    const rows = [];
+    let currentRow = [];
+
+    fields.forEach((field, index) => {
+      if (field.fullWidth) {
+        if (currentRow.length > 0) {
+          rows.push(
+            <div className="input-row" key={`row-${index}-partial`}>
+              {currentRow.map(renderInputGroup)}
+            </div>
+          );
+          currentRow = [];
+        }
+        rows.push(
+          <div className="input-row" key={`row-${index}-full`}>
+            {renderInputGroup(field)}
+          </div>
+        );
+      } else {
+        currentRow.push(field);
+        if (currentRow.length === 2) {
+          rows.push(
+            <div className="input-row" key={`row-${index}`}>
+              {currentRow.map(renderInputGroup)}
+            </div>
+          );
+          currentRow = [];
+        }
+      }
+    });
+
+    if (currentRow.length > 0) {
+      rows.push(
+        <div className="input-row" key="row-final">
+          {currentRow.map(renderInputGroup)}
+        </div>
+      );
+    }
+
+    return rows;
+  };
+
   return (
     <div className="modal-overlay">
-<div className={`modal-container ${title?.includes("Product") || title?.includes("Category") ? "large" : "small"}`}>
+      <div className={`modal-container ${title?.includes("Product") || title?.includes("Category") ? "large" : "small"}`}>
         <div className="modal-header">
           <h3>{title}</h3>
           <button className="modal-close" onClick={onClose}>
@@ -115,15 +159,7 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
         </div>
 
         <form className="modal-form" onSubmit={handleSubmit}>
-          {/* Auto generate fields in rows of 2 */}
-          {Array.from({ length: Math.ceil(fields.length / 2) }).map((_, rowIndex) => (
-            <div className="input-row" key={rowIndex}>
-              {fields
-                .slice(rowIndex * 2, rowIndex * 2 + 2)
-                .map((field) => renderInputGroup(field))}
-            </div>
-          ))}
-
+          {renderFieldsInRows()}
           <div className="modal-actions">
             <button type="button" className="btn-close" onClick={onClose}>
               Close

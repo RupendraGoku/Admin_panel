@@ -1,0 +1,57 @@
+
+
+/* 3-dot action button */
+.action-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+/* 3-dot Action Column Container */
+.action-col {
+  position: relative;
+  z-index: 1;
+}
+
+/* Dropdown menu shown on top of all elements */
+.action-menu {
+  position: fixed; /* fixed to escape container boundaries */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  padding: 6px 0;
+}
+
+/* Menu Buttons */
+.action-menu button {
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.action-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+.action-menu .fa-edit {
+  color: darkgray;
+}
+
+.action-menu .fa-trash-alt {
+  color: darkgray;
+}
