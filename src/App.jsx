@@ -7,6 +7,7 @@ import Product from './Components/Product';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Components/Home';
 import Layout from './Layout';
+// import Test from './Components/Test';
 function App() {
 
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path='category' element={<Category/>}/>
             <Route path='users' element={<Users/>}/>
             <Route path='product' element={<Product/>}/>
+            {/* <Route path='test' element={<Test/>}/> */}
             </Route>
           </Routes>
         </Router>

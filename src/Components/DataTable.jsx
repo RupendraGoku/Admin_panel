@@ -25,7 +25,7 @@ const DataTable = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [dropdownIndex, setDropdownIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 7;
 
   React.useEffect(() => {
     setTableData(data);
@@ -73,15 +73,27 @@ const DataTable = ({
     setSelectedRow(null);
   };
 
- const handleModalSubmit = (formData) => {
+const handleModalSubmit = (formData) => {
   setIsModalOpen(false);
   setSelectedRow(null);
-  setReload(!reload);
 
   if (modalMode === "delete") {
     toast.success("User Deleted Successfully");
+    setReload(!reload);
+    return;
+  }
+
+  const hasValidData = formData && Object.values(formData).some(val => val && String(val).trim() !== "");
+
+  if (hasValidData) {
+    toast.success("User Added Successfully");
+    setReload(!reload); // ✅ Trigger re-fetch from backend
+  } else {
+    console.warn("Ignored empty form submission.");
   }
 };
+
+
 
   const handleDropdownToggle = (sno) => {
     setDropdownIndex((prevIndex) => (prevIndex === sno ? null : sno));

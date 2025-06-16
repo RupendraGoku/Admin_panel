@@ -9,17 +9,45 @@ const userFields = [
     label: "Role",
     name: "user_role",
     type: "radio",
-    options: ["Admin", "User"], // 1 = Admin, 2 = User
     required: true,
     fullWidth: true,
+    options: [
+      { value: "1", label: "Admin" },
+      { value: "2", label: "User" },
+    ]
   },
-  { label: "Phone", name: "user_phone", type: "text" },
-  { label: "Username", name: "user_username", type: "text", required: true },
+  { label: "Phone", name: "user_phone", type: "text", required: true },     // ← Left
+  { label: "Username", name: "user_username", type: "text", required: true } // → Right
 ];
+
+
 
 const Users = () => {
   const [userData, setUserData] = useState([]);
   const [reload, setReload] = useState(false);
+
+  const getRoleLabel = (role) => {
+    switch (role) {
+      case "1":
+        return "Admin";
+      case "2":
+        return "User";
+      default:
+        return "-";
+    }
+  };
+
+  // Convert backend status number to string label
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "1":
+        return "Active";
+      case "0":
+        return "Deactive";
+      default:
+        return "-";
+    }
+  };
 
   const normalizeUser = (user, index) => ({
     sno: index + 1,
@@ -28,18 +56,19 @@ const Users = () => {
     user_email: user.user_email || "-",
     user_phone: user.user_phone || "-",
     user_username: user.user_username || "-",
-    user_role: user.user_role === "1" ? "Admin" : "User",
-    user_status: user.user_status === "1" ? "Active" : "Inactive",
+    user_role: getRoleLabel(user.user_role),
+    user_status: getStatusLabel(user.user_status),
   });
 
   const fetchUsers = async () => {
     try {
       const res = await fetch("https://myworkstatus.in/ecom/api/user_record.php");
       const data = await res.json();
-       console.log("Raw API response:", data);
-      
+      console.log("Raw API response:", data);
+
       if (Array.isArray(data)) {
-        setUserData(data.map(normalizeUser));
+        const normalized = data.map(normalizeUser).filter(Boolean);
+        setUserData(normalized);
       } else {
         setUserData([]);
       }
@@ -58,7 +87,7 @@ const Users = () => {
       title="Users Record"
       addBtnLabel="Add User"
       addBtnIcon="fa-user-plus"
-headers={["Sno", "Name", "Email", "Phone", "Username", "Role", "Status", "Action"]}
+      headers={["Sno", "Name", "Email", "Phone", "Username", "Role", "Status", "Action"]}
       data={userData}
       cssClassPrefix="datatable"
       modalFields={userFields}

@@ -7,7 +7,7 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
 
   useEffect(() => {
     const initialData = fields.reduce((acc, field) => {
-      acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?.[0] : "");
+acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?.[0].value : "");
       return acc;
     }, {});
     setFormData(initialData);
@@ -15,9 +15,30 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    const lowerName = name.toLowerCase();
+    let newValue = value;
+
+    // Restrict typing for specific fields
+    if (lowerName.includes("name") && !lowerName.includes("username")) {
+      newValue = newValue.replace(/[^A-Za-z\s]/g, ""); // Only letters and spaces
+    }
+
+    if (["phone", "mobile", "contact"].some((key) => lowerName.includes(key))) {
+      newValue = newValue.replace(/\D/g, "").slice(0, 10); // Only digits, max 10
+    }
+
+    const finalValue =
+      type === "checkbox"
+        ? checked
+        : type === "file"
+        ? e.target.multiple
+          ? files
+          : files[0]
+        : newValue;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : type === "file" ? (e.target.multiple ? files : files[0]) : value,
+      [name]: finalValue,
     }));
   };
 
@@ -25,23 +46,47 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     e.preventDefault();
     setSubmitting(true);
 
+    // Check required fields
+    for (const field of fields) {
+      if (field.required && !formData[field.name]) {
+        alert(`Please fill in the required field: ${field.label}`);
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    // Additional validation before submitting
+    for (const key in formData) {
+      const value = formData[key];
+      const lowerKey = key.toLowerCase();
+
+      if (lowerKey.includes("name") && !lowerKey.includes("username") && !/^[A-Za-z\s]+$/.test(value)) {
+        alert("Name fields must contain only letters and spaces.");
+        setSubmitting(false);
+        return;
+      }
+
+      if (["phone", "mobile", "contact"].some((k) => lowerKey.includes(k)) && !/^\d{10}$/.test(value)) {
+        alert("Phone number must contain exactly 10 digits.");
+        setSubmitting(false);
+        return;
+      }
+    }
+
     try {
-      const payload = { ...formData };
-
-      // Optional: Convert file object to base64 or FormData if file upload is required
-
       const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
+
       if (result.success) {
-        onSubmit();  // Triggers parent reload
-        onClose();   // Close modal
+        onSubmit(result.data || formData);
+        onClose();
       } else {
         alert(result.message || "Failed to add user.");
       }
@@ -60,9 +105,7 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
       className={`input-group ${field.fullWidth ? "full-width" : ""} ${field.className || ""}`}
       key={field.name}
     >
-      <label className={field.required ? "required" : ""}>
-        {field.label}
-      </label>
+      <label className={field.required ? "required" : ""}>{field.label}</label>
 
       {["text", "email", "number", "password"].includes(field.type) && (
         <input
@@ -88,18 +131,19 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
 
       {field.type === "radio" && (
         <div className="radio-group">
-          {field.options.map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                name={field.name}
-                value={option}
-                checked={formData[field.name] === option}
-                onChange={handleChange}
-              />
-              {option}
-            </label>
-          ))}
+         {field.options.map((option) => (
+  <label key={option.value}>
+    <input
+      type="radio"
+      name={field.name}
+      value={option.value}
+      checked={formData[field.name] === option.value}
+      onChange={handleChange}
+    />
+    {option.label}
+  </label>
+))}
+
         </div>
       )}
 
