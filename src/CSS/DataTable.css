@@ -3,11 +3,11 @@
 /* Wrapper */
 .datatable-wrapper {
   flex-direction: column;
-  background-color: #f8f9fc;
+  background-color: #FFFFFF;
   box-sizing: border-box;
-  padding: 20px 30px;
+  padding: 15px 15px;
   border-radius: 4px;
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.1);
   min-height: 30%;
   width: 100%;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -23,8 +23,8 @@
 }
 
 .datatable-header h2 {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 500;
 }
 
 /* Add Button */
@@ -52,19 +52,18 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
 }
 
-.export-buttons,
-.pagination-buttons {
+.export-buttons {
   display: flex;
   gap: 6px;
 }
 
 .export-buttons button,
-.pagination-buttons button {
+ button {
   padding: 6px 12px;
-  border: 1px solid #ccd1d9;
+  border: 0px solid #ccd1d9;
   background-color: #eff2f7;
   cursor: pointer;
   border-radius: 2px;
@@ -72,8 +71,7 @@
   font-size: 14px;
 }
 
-.export-buttons button:hover,
-.pagination-buttons button:hover {
+.export-buttons button:hover:hover {
   background-color: #e4e4e4;
 }
 .search-form {
@@ -81,7 +79,6 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  margin-top: -8px; /* Adjust as needed to match vertical alignment */
 }
 
 .search-form label {
@@ -93,7 +90,7 @@
 .search-form input {
   padding: 6px 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 2px;
   font-size: 14px;
   width: 180px;
 }
@@ -118,7 +115,7 @@
 /* Table */
 .datatable-table-container {
   flex: 1;
-  overflow-x: auto;
+  overflow-x: visible;
   margin-bottom: 20px;
   /* background: #FFFFFF; */
   border-radius: 8px;
@@ -154,10 +151,10 @@
 /* Status Badge */
 .status-badge {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bolder;
   color: white;
 }
 
@@ -169,16 +166,7 @@
   background-color: #e74a3b;
 }
 
-/* Action Button */
-.action-btn {
-  padding: 6px 10px;
-  background-color: #e7f1ff;
-  color: #1b4d89;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
+
 
 /* Footer */
 .datatable-footer {
@@ -186,7 +174,7 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding-top: 10px;
+  /* padding-top: 10px; */
   margin-top: auto;
 }
 
@@ -199,25 +187,66 @@
 /* Active/Deactive Status */
 .status-badge.active,
 .status-badge.status-active {
-  background-color: #1cc88a;
+  background-color: #0AB39C;
 }
 
 .status-badge.deactive,
 .status-badge.status-deactive {
-  background-color: #e74a3b;
+  background-color: #F06548;
 }
 
-/* Action Button */
-.action-button,
-.action-btn {
-  padding: 6px 10px;
-  background-color: #e7f1ff;
-  color: #1b4d89;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
+  .datatable-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+ .pagination-buttons {
+  display: flex;
+  align-items: center;
+
 }
+
+.pagination-buttons button {
+  padding: 6px 12px;
+  border: none;
+  background: #eff2f7;
+  color: #6c757d;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.pagination-buttons button.active {
+  background: #4054b2;
+  color: #ffffff;
+  font-weight: 300;
+}
+
+.pagination-buttons button.active:hover {
+  background: #33439e;
+}
+
+.pagination-buttons button:hover {
+  background: #e4e4e4;
+  color: #000000;
+}
+
+/* Align pagination to the right side of footer */
+.datatable-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  padding-top: 0px;
+  margin-top: auto;
+}
+
+.datatable-footer .pagination-buttons {
+  margin-left: auto;
+}
+
+
 
 /* Mobile Image Resize */
 @media (max-width: 768px) {
@@ -275,14 +304,4 @@
     width: 800px;
   }
 
-  .datatable-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .pagination-buttons {
-    width: 100%;
-    justify-content: space-between;
-  }
 }

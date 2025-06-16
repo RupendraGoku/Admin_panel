@@ -3,6 +3,7 @@ import "../CSS/AddModal.css";
 
 const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "default" }) => {
   const [formData, setFormData] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const initialData = fields.reduce((acc, field) => {
@@ -20,10 +21,36 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    onClose();
+    setSubmitting(true);
+
+    try {
+      const payload = { ...formData };
+
+      // Optional: Convert file object to base64 or FormData if file upload is required
+
+      const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        onSubmit();  // Triggers parent reload
+        onClose();   // Close modal
+      } else {
+        alert(result.message || "Failed to add user.");
+      }
+    } catch (error) {
+      console.error("Add user error:", error);
+      alert("Something went wrong while adding the user.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -104,7 +131,6 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     </div>
   );
 
-  // ✅ Smart layout handling: full-width fields break row, others grouped in 2s
   const renderFieldsInRows = () => {
     const rows = [];
     let currentRow = [];
@@ -150,7 +176,7 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
 
   return (
     <div className="modal-overlay">
-      <div className={`modal-container ${title?.includes("Product") || title?.includes("Category") ? "large" : "small"}`}>
+      <div className={`modal-container ${size === "large" ? "large" : "small"}`}>
         <div className="modal-header">
           <h3>{title}</h3>
           <button className="modal-close" onClick={onClose}>
@@ -164,8 +190,8 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
             <button type="button" className="btn-close" onClick={onClose}>
               Close
             </button>
-            <button type="submit" className="btn-submit">
-              Submit
+            <button type="submit" className="btn-submit" disabled={submitting}>
+              {submitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

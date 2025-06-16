@@ -1,63 +1,71 @@
+import React, { useEffect, useState } from "react";
 import DataTable from "./DataTable";
 import "../CSS/DataTable.css";
 
-const userData = [
-  {
-    sno: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "1234567890",
-    username: "johndoe",
-    role: "Admin",
-    status: "Active",
-  },
-];
-
 const userFields = [
-  { label: "Name", name: "name", type: "text", required: true },
-  { label: "Email", name: "email", type: "email", required: true },
+  { label: "Name", name: "user_name", type: "text", required: true },
+  { label: "Email", name: "user_email", type: "email", required: true },
   {
     label: "Role",
-    name: "role",
+    name: "user_role",
     type: "radio",
-    options: ["Admin", "User"],
+    options: ["Admin", "User"], // 1 = Admin, 2 = User
     required: true,
-    fullWidth: true, // 👈 key to make it take a full row
+    fullWidth: true,
   },
-  { label: "Phone", name: "phone", type: "text" },
-  { label: "Username", name: "username", type: "text", required: true },
+  { label: "Phone", name: "user_phone", type: "text" },
+  { label: "Username", name: "user_username", type: "text", required: true },
 ];
 
+const Users = () => {
+  const [userData, setUserData] = useState([]);
+  const [reload, setReload] = useState(false);
 
+  const normalizeUser = (user, index) => ({
+    sno: index + 1,
+    user_id: user.user_id,
+    user_name: user.user_name || "-",
+    user_email: user.user_email || "-",
+    user_phone: user.user_phone || "-",
+    user_username: user.user_username || "-",
+    user_role: user.user_role === "1" ? "Admin" : "User",
+    user_status: user.user_status === "1" ? "Active" : "Inactive",
+  });
 
-const Users = () => (
-  <DataTable
-    title="Users Record"
-    addBtnLabel="Add User"
-    addBtnIcon="fa-user-plus"
-    headers={["Sno", "Name", "Email", "Phone", "Username", "Role", "Status", "Action"]}
-    data={userData}
-    cssClassPrefix="datatable"
-    renderRow={(item, i) => (
-      <tr key={i}>
-        <td>{item.sno}</td>
-        <td>{item.name}</td>
-        <td>{item.email}</td>
-        <td>{item.phone}</td>
-        <td>{item.username}</td>
-        <td>{item.role}</td>
-        <td>
-          <span className={`status-badge ${item.status === "Active" ? "status-active" : "status-deactive"}`}>
-            {item.status}
-          </span>
-        </td>
-        <td>
-          <button className="action-btn">...</button>
-        </td>
-      </tr>
-    )}
-    modalFields={userFields}
-  />
-);
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("https://myworkstatus.in/ecom/api/user_record.php");
+      const data = await res.json();
+       console.log("Raw API response:", data);
+      
+      if (Array.isArray(data)) {
+        setUserData(data.map(normalizeUser));
+      } else {
+        setUserData([]);
+      }
+    } catch (error) {
+      console.error("API fetch failed:", error);
+      setUserData([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [reload]);
+
+  return (
+    <DataTable
+      title="Users Record"
+      addBtnLabel="Add User"
+      addBtnIcon="fa-user-plus"
+headers={["Sno", "Name", "Email", "Phone", "Username", "Role", "Status", "Action"]}
+      data={userData}
+      cssClassPrefix="datatable"
+      modalFields={userFields}
+      reload={reload}
+      setReload={setReload}
+    />
+  );
+};
 
 export default Users;
