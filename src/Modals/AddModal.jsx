@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "../CSS/AddModal.css";
+import React, { useEffect, useState } from "react";
+import "./../CSS/AddModal.css";
+import FormRows from "./FormFields/FormRows";
 
 const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "default" }) => {
   const [formData, setFormData] = useState({});
@@ -7,7 +8,7 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
 
   useEffect(() => {
     const initialData = fields.reduce((acc, field) => {
-acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?.[0].value : "");
+      acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?.[0]?.value : "");
       return acc;
     }, {});
     setFormData(initialData);
@@ -18,13 +19,12 @@ acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?
     const lowerName = name.toLowerCase();
     let newValue = value;
 
-    // Restrict typing for specific fields
     if (lowerName.includes("name") && !lowerName.includes("username")) {
-      newValue = newValue.replace(/[^A-Za-z\s]/g, ""); // Only letters and spaces
+      newValue = newValue.replace(/[^A-Za-z\s]/g, "");
     }
 
     if (["phone", "mobile", "contact"].some((key) => lowerName.includes(key))) {
-      newValue = newValue.replace(/\D/g, "").slice(0, 10); // Only digits, max 10
+      newValue = newValue.replace(/\D/g, "").slice(0, 10);
     }
 
     const finalValue =
@@ -46,7 +46,6 @@ acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?
     e.preventDefault();
     setSubmitting(true);
 
-    // Check required fields
     for (const field of fields) {
       if (field.required && !formData[field.name]) {
         alert(`Please fill in the required field: ${field.label}`);
@@ -55,7 +54,6 @@ acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?
       }
     }
 
-    // Additional validation before submitting
     for (const key in formData) {
       const value = formData[key];
       const lowerKey = key.toLowerCase();
@@ -100,124 +98,6 @@ acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?
 
   if (!isOpen) return null;
 
-  const renderInputGroup = (field) => (
-    <div
-      className={`input-group ${field.fullWidth ? "full-width" : ""} ${field.className || ""}`}
-      key={field.name}
-    >
-      <label className={field.required ? "required" : ""}>{field.label}</label>
-
-      {["text", "email", "number", "password"].includes(field.type) && (
-        <input
-          type={field.type}
-          name={field.name}
-          value={formData[field.name] || ""}
-          onChange={handleChange}
-          placeholder={field.placeholder || ""}
-          required={field.required}
-        />
-      )}
-
-      {field.type === "file" && (
-        <input
-          type="file"
-          name={field.name}
-          onChange={handleChange}
-          required={field.required}
-          accept={field.accept}
-          multiple={field.multiple}
-        />
-      )}
-
-      {field.type === "radio" && (
-        <div className="radio-group">
-         {field.options.map((option) => (
-  <label key={option.value}>
-    <input
-      type="radio"
-      name={field.name}
-      value={option.value}
-      checked={formData[field.name] === option.value}
-      onChange={handleChange}
-    />
-    {option.label}
-  </label>
-))}
-
-        </div>
-      )}
-
-      {field.type === "select" && (
-        <select
-          name={field.name}
-          value={formData[field.name]}
-          onChange={handleChange}
-          required={field.required}
-        >
-          {field.options.map((option) => (
-            <option value={option} key={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      )}
-
-      {field.type === "textarea" && (
-        <textarea
-          name={field.name}
-          value={formData[field.name]}
-          onChange={handleChange}
-          placeholder={field.placeholder || ""}
-          required={field.required}
-          rows="3"
-        />
-      )}
-    </div>
-  );
-
-  const renderFieldsInRows = () => {
-    const rows = [];
-    let currentRow = [];
-
-    fields.forEach((field, index) => {
-      if (field.fullWidth) {
-        if (currentRow.length > 0) {
-          rows.push(
-            <div className="input-row" key={`row-${index}-partial`}>
-              {currentRow.map(renderInputGroup)}
-            </div>
-          );
-          currentRow = [];
-        }
-        rows.push(
-          <div className="input-row" key={`row-${index}-full`}>
-            {renderInputGroup(field)}
-          </div>
-        );
-      } else {
-        currentRow.push(field);
-        if (currentRow.length === 2) {
-          rows.push(
-            <div className="input-row" key={`row-${index}`}>
-              {currentRow.map(renderInputGroup)}
-            </div>
-          );
-          currentRow = [];
-        }
-      }
-    });
-
-    if (currentRow.length > 0) {
-      rows.push(
-        <div className="input-row" key="row-final">
-          {currentRow.map(renderInputGroup)}
-        </div>
-      );
-    }
-
-    return rows;
-  };
-
   return (
     <div className="modal-overlay">
       <div className={`modal-container ${size === "large" ? "large" : "small"}`}>
@@ -227,13 +107,10 @@ acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?
             &times;
           </button>
         </div>
-
         <form className="modal-form" onSubmit={handleSubmit}>
-          {renderFieldsInRows()}
+          <FormRows fields={fields} formData={formData} handleChange={handleChange} />
           <div className="modal-actions">
-            <button type="button" className="btn-close" onClick={onClose}>
-              Close
-            </button>
+            <button type="button" className="btn-close" onClick={onClose}>Close</button>
             <button type="submit" className="btn-submit" disabled={submitting}>
               {submitting ? "Submitting..." : "Submit"}
             </button>

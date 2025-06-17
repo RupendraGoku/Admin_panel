@@ -77,21 +77,25 @@ const handleModalSubmit = (formData) => {
   setIsModalOpen(false);
   setSelectedRow(null);
 
-  if (modalMode === "delete") {
-    toast.success("User Deleted Successfully");
-    setReload(!reload);
+  const hasValidData =
+    formData && Object.values(formData).some(val => val !== undefined && String(val).trim() !== "");
+
+  if (!hasValidData) {
+    console.warn("Ignored empty form submission.");
     return;
   }
 
-  const hasValidData = formData && Object.values(formData).some(val => val && String(val).trim() !== "");
-
-  if (hasValidData) {
+  if (modalMode === "add") {
     toast.success("User Added Successfully");
-    setReload(!reload); // ✅ Trigger re-fetch from backend
-  } else {
-    console.warn("Ignored empty form submission.");
+  } else if (modalMode === "edit") {
+    toast.success("User Updated Successfully");
+  } else if (modalMode === "delete") {
+    toast.success("User Deleted Successfully");
   }
+
+  setReload(!reload); // ✅ Refresh table
 };
+
 
 
 
