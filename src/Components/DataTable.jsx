@@ -74,9 +74,6 @@ const DataTable = ({
   };
 
 const handleModalSubmit = (formData) => {
-  setIsModalOpen(false);
-  setSelectedRow(null);
-
   const hasValidData =
     formData && Object.values(formData).some(val => val !== undefined && String(val).trim() !== "");
 
@@ -87,16 +84,23 @@ const handleModalSubmit = (formData) => {
 
   if (modalMode === "add") {
     toast.success("User Added Successfully");
-  } else if (modalMode === "edit") {
-    toast.success("User Updated Successfully");
-  } else if (modalMode === "delete") {
-    toast.success("User Deleted Successfully");
+    setReload(!reload); // ✅ Refresh the data
   }
 
-  setReload(!reload); // ✅ Refresh table
+  if (modalMode === "edit") {
+    toast.success("User Updated Successfully");
+    setReload(!reload); // ✅ Refresh the data
+  }
+
+  if (modalMode === "delete") {
+    toast.success("User Deleted Successfully");
+    setReload(!reload); // ✅ Refresh the data
+  }
+
+  // ✅ Close modal after successful submit for any mode
+  setIsModalOpen(false);
+  setSelectedRow(null);
 };
-
-
 
 
   const handleDropdownToggle = (sno) => {
@@ -260,15 +264,16 @@ const handleModalSubmit = (formData) => {
       )}
 
       {isModalOpen && modalMode === "edit" && (
-        <EditModal
-          isOpen={true}
-          onClose={handleModalClose}
-          title="Edit User"
-          data={selectedRow}
-          fields={modalFields}
-          onSubmit={handleModalSubmit}
-        />
-      )}
+  <EditModal
+    isOpen={true}
+    onClose={handleModalClose}
+    title="Edit User"
+    initialData={selectedRow}      
+    fields={modalFields}
+    onSubmit={handleModalSubmit}
+  />
+)}
+
 
       {isModalOpen && modalMode === "delete" && (
         <DeleteModal

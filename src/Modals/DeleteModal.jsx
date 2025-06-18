@@ -29,6 +29,7 @@ const DeleteModal = ({
       if (result.success) {
         onDelete(); // Refresh list
         onClose();  // Close modal
+         window.location.reload();
       } else {
         alert(result.message || "Failed to delete user.");
       }

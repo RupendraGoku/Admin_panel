@@ -1,4 +1,3 @@
-// Components/Modals/EditModal.jsx
 import React from "react";
 import "../CSS/AddModal.css";
 import UserForm from "./UserForm.jsx";
@@ -11,13 +10,14 @@ const EditModal = ({ isOpen, onClose, onSubmit, title, fields = [], initialData 
       const response = await fetch("https://myworkstatus.in/ecom/api/user_update.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, user_id: initialData.user_id }), // ✅ ensure user_id sent
       });
       const result = await response.json();
 
       if (result.status === "true") {
         onSubmit(formData);
         onClose();
+         window.location.reload();
       } else {
         alert(result.message || "Update failed.");
       }

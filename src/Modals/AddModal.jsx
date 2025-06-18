@@ -42,59 +42,60 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
 
-    for (const field of fields) {
-      if (field.required && !formData[field.name]) {
-        alert(`Please fill in the required field: ${field.label}`);
-        setSubmitting(false);
-        return;
-      }
-    }
-
-    for (const key in formData) {
-      const value = formData[key];
-      const lowerKey = key.toLowerCase();
-
-      if (lowerKey.includes("name") && !lowerKey.includes("username") && !/^[A-Za-z\s]+$/.test(value)) {
-        alert("Name fields must contain only letters and spaces.");
-        setSubmitting(false);
-        return;
-      }
-
-      if (["phone", "mobile", "contact"].some((k) => lowerKey.includes(k)) && !/^\d{10}$/.test(value)) {
-        alert("Phone number must contain exactly 10 digits.");
-        setSubmitting(false);
-        return;
-      }
-    }
-
-    try {
-      const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        onSubmit(result.data || formData);
-        onClose();
-      } else {
-        alert(result.message || "Failed to add user.");
-      }
-    } catch (error) {
-      console.error("Add user error:", error);
-      alert("Something went wrong while adding the user.");
-    } finally {
+  // Validation checks
+  for (const field of fields) {
+    if (field.required && !formData[field.name]) {
+      alert(`Please fill in the required field: ${field.label}`);
       setSubmitting(false);
+      return;
     }
-  };
+  }
+
+  for (const key in formData) {
+    const value = formData[key];
+    const lowerKey = key.toLowerCase();
+
+    if (lowerKey.includes("name") && !lowerKey.includes("username") && !/^[A-Za-z\s]+$/.test(value)) {
+      alert("Name fields must contain only letters and spaces.");
+      setSubmitting(false);
+      return;
+    }
+
+    if (["phone", "mobile", "contact"].some((k) => lowerKey.includes(k)) && !/^\d{10}$/.test(value)) {
+      alert("Phone number must contain exactly 10 digits.");
+      setSubmitting(false);
+      return;
+    }
+  }
+
+  try {
+    const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+
+   if (result.success) {
+  onSubmit(result.data || formData); 
+}
+ else {
+      alert(result.message || "Failed to add user.");
+    }
+  } catch (error) {
+    console.error("Add user error:", error);
+    alert("Something went wrong while adding the user.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   if (!isOpen) return null;
 

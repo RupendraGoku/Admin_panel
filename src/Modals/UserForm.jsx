@@ -2,18 +2,29 @@
 import React, { useEffect, useState } from "react";
 import FormRows from "./FormFields/FormRows";
 
-const UserForm = ({ fields = [], initialData = {}, onSubmit, onCancel, submitLabel = "Submit" }) => {
+const UserForm = ({
+  fields = [],
+  initialData = {},
+  onSubmit,
+  onCancel,
+  submitLabel = "Submit",
+}) => {
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    const initData = fields.reduce((acc, field) => {
-      acc[field.name] =
-        initialData[field.name] ??
-        field.defaultValue ??
-        (field.type === "radio" ? field.options?.[0]?.value : "");
-      return acc;
-    }, {});
+    const initData = {
+      ...initialData, // ✅ preserve user_id and other backend-required fields
+    };
+
+    fields.forEach((field) => {
+      if (!(field.name in initData)) {
+        initData[field.name] =
+          field.defaultValue ??
+          (field.type === "radio" ? field.options?.[0]?.value : "");
+      }
+    });
+
     setFormData(initData);
   }, [fields, initialData]);
 
@@ -22,18 +33,24 @@ const UserForm = ({ fields = [], initialData = {}, onSubmit, onCancel, submitLab
     const lowerName = name.toLowerCase();
     let newValue = value;
 
+    // Clean name inputs (only alphabets and spaces)
     if (lowerName.includes("name") && !lowerName.includes("username")) {
       newValue = newValue.replace(/[^A-Za-z\s]/g, "");
     }
 
+    // Clean phone inputs (digits only, max 10)
     if (["phone", "mobile", "contact"].some((key) => lowerName.includes(key))) {
       newValue = newValue.replace(/\D/g, "").slice(0, 10);
     }
 
     const finalValue =
-      type === "checkbox" ? checked :
-      type === "file" ? (e.target.multiple ? files : files[0]) :
-      newValue;
+      type === "checkbox"
+        ? checked
+        : type === "file"
+        ? e.target.multiple
+          ? files
+          : files[0]
+        : newValue;
 
     setFormData((prev) => ({
       ...prev,
@@ -43,20 +60,29 @@ const UserForm = ({ fields = [], initialData = {}, onSubmit, onCancel, submitLab
 
   const validate = () => {
     for (const field of fields) {
-      if (field.required && !formData[field.name]) {
+      const val = formData[field.name];
+      const key = field.name.toLowerCase();
+
+      if (field.required && (val === undefined || val === "")) {
         alert(`Please fill in the required field: ${field.label}`);
         return false;
       }
 
-      const val = formData[field.name];
-      const key = field.name.toLowerCase();
-
-      if (key.includes("name") && !key.includes("username") && !/^[A-Za-z\s]+$/.test(val)) {
+      if (
+        key.includes("name") &&
+        !key.includes("username") &&
+        val &&
+        !/^[A-Za-z\s]+$/.test(val)
+      ) {
         alert("Name fields must contain only letters and spaces.");
         return false;
       }
 
-      if (["phone", "mobile", "contact"].some(k => key.includes(k)) && !/^\d{10}$/.test(val)) {
+      if (
+        ["phone", "mobile", "contact"].some((k) => key.includes(k)) &&
+        val &&
+        !/^\d{10}$/.test(val)
+      ) {
         alert("Phone number must be exactly 10 digits.");
         return false;
       }
@@ -73,15 +99,21 @@ const UserForm = ({ fields = [], initialData = {}, onSubmit, onCancel, submitLab
       return;
     }
 
-    await onSubmit(formData);
+    await onSubmit(formData); // Submit updated form
     setSubmitting(false);
   };
 
   return (
     <form className="modal-form" onSubmit={handleSubmit}>
-      <FormRows fields={fields} formData={formData} handleChange={handleChange} />
+      <FormRows
+        fields={fields}
+        formData={formData}
+        handleChange={handleChange}
+      />
       <div className="modal-actions">
-        <button type="button" className="btn-close" onClick={onCancel}>Close</button>
+        <button type="button" className="btn-close" onClick={onCancel}>
+          Close
+        </button>
         <button type="submit" className="btn-submit" disabled={submitting}>
           {submitting ? "Submitting..." : submitLabel}
         </button>

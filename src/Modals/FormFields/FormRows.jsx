@@ -1,27 +1,38 @@
 import InputGroup from "./InputGroup";
 import "../../CSS/AddModal.css";
 
-
 const FormRows = ({ fields, formData, handleChange }) => {
   const rows = [];
   let currentRow = [];
 
   fields.forEach((field, index) => {
     if (field.fullWidth) {
+      // Push any existing 2-column row
       if (currentRow.length) {
         rows.push(
           <div className="input-row" key={`row-${index}-partial`}>
             {currentRow.map((f) => (
-              <InputGroup key={f.name} field={f} value={formData[f.name]} onChange={handleChange} />
+              <InputGroup
+                key={f.name}
+                field={f}
+                value={formData[f.name]}
+                onChange={handleChange}
+              />
             ))}
           </div>
         );
         currentRow = [];
       }
 
+      // Push full-width field in its own row
       rows.push(
-        <div className="input-row" key={`row-${index}-full`}>
-          <InputGroup key={field.name} field={field} value={formData[field.name]} onChange={handleChange} />
+        <div className="input-row full-width" key={`row-${index}-full`}>
+          <InputGroup
+            key={field.name}
+            field={field}
+            value={formData[field.name]}
+            onChange={handleChange}
+          />
         </div>
       );
     } else {
@@ -30,7 +41,12 @@ const FormRows = ({ fields, formData, handleChange }) => {
         rows.push(
           <div className="input-row" key={`row-${index}`}>
             {currentRow.map((f) => (
-              <InputGroup key={f.name} field={f} value={formData[f.name]} onChange={handleChange} />
+              <InputGroup
+                key={f.name}
+                field={f}
+                value={formData[f.name]}
+                onChange={handleChange}
+              />
             ))}
           </div>
         );
@@ -39,17 +55,23 @@ const FormRows = ({ fields, formData, handleChange }) => {
     }
   });
 
+  // Push final row if any remaining fields
   if (currentRow.length > 0) {
     rows.push(
       <div className="input-row" key="final-row">
         {currentRow.map((f) => (
-          <InputGroup key={f.name} field={f} value={formData[f.name]} onChange={handleChange} />
+          <InputGroup
+            key={f.name}
+            field={f}
+            value={formData[f.name]}
+            onChange={handleChange}
+          />
         ))}
       </div>
     );
   }
 
-  return rows;
+  return <>{rows}</>;
 };
 
 export default FormRows;
