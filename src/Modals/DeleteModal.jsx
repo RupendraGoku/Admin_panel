@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../CSS/AddModal.css";
 // import "../CSS/EditDelete.css";
+import { toast } from "react-toastify";
+
 
 const DeleteModal = ({
   isOpen,
@@ -14,32 +16,37 @@ const DeleteModal = ({
   if (!isOpen || !data?.user_id) return null;
 
   const handleDelete = async () => {
-    setDeleting(true);
-    try {
-      const response = await fetch("https://myworkstatus.in/ecom/api/user_delete.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user_id: data.user_id }),
-      });
+  setDeleting(true);
+  try {
+    const response = await fetch("https://myworkstatus.in/ecom/api/user_delete.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: data.user_id }),
+    });
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (result.success) {
-        onDelete(); // Refresh list
-        onClose();  // Close modal
-         window.location.reload();
-      } else {
-        alert(result.message || "Failed to delete user.");
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
-      alert("Something went wrong while deleting.");
-    } finally {
-      setDeleting(false);
+    if (result.success || result.status === "true") {
+      toast.success("User deleted successfully."); // ✅ Toast for success
+      onDelete();     // Inform parent
+      onClose();      // Close modal
+      setTimeout(() => {
+        window.location.reload(); // ✅ Reload after short delay for better UX
+      }, 1000);
+    } else {
+      toast.error(result.message || "Failed to delete user.");
     }
-  };
+  } catch (error) {
+    console.error("Delete error:", error);
+    toast.error("Something went wrong while deleting.");
+  } finally {
+    setDeleting(false);
+  }
+};
+
+
 
   return (
     <div className="modal-overlay">

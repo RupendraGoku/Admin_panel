@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./../CSS/AddModal.css";
 import FormRows from "./FormFields/FormRows";
+import { toast } from "react-toastify";
+
 
 const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "default" }) => {
   const [formData, setFormData] = useState({});
@@ -83,12 +85,14 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
 
     const result = await response.json();
 
-   if (result.success) {
-  onSubmit(result.data || formData); 
+if (result.success || result.status === "true") {
+  onSubmit(result.data || formData);
+  onClose(); // ✅ Close the modal automatically
+  window.location.reload(); // ✅ Reload to show the new user
+} else {
+  alert(result.message || "Failed to add user.");
 }
- else {
-      alert(result.message || "Failed to add user.");
-    }
+
   } catch (error) {
     console.error("Add user error:", error);
     alert("Something went wrong while adding the user.");

@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Components/Home';
 import Layout from './Layout';
 // import Test from './Components/Test';
+import { ToastContainer } from "react-toastify";
+
 function App() {
 
   return (
@@ -17,6 +19,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Layout/>}>
              <Route index element={<Home />} /> 
+             
              <Route path='brands' element={<Brands/>}/>
             <Route path='category' element={<Category/>}/>
             <Route path='users' element={<Users/>}/>
