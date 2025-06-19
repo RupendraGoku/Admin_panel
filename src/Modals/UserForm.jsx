@@ -1,4 +1,3 @@
-// Components/UserForm.jsx
 import React, { useEffect, useState } from "react";
 import FormRows from "./FormFields/FormRows";
 
@@ -14,7 +13,7 @@ const UserForm = ({
 
   useEffect(() => {
     const initData = {
-      ...initialData, // ✅ preserve user_id and other backend-required fields
+      ...initialData,
     };
 
     fields.forEach((field) => {
@@ -33,25 +32,16 @@ const UserForm = ({
     const lowerName = name.toLowerCase();
     let newValue = value;
 
-    // Clean name inputs (only alphabets and spaces)
     if (lowerName.includes("name") && !lowerName.includes("username")) {
       newValue = newValue.replace(/[^A-Za-z\s]/g, "");
     }
 
-    // Clean phone inputs (digits only, max 10)
     if (["phone", "mobile", "contact"].some((key) => lowerName.includes(key))) {
       newValue = newValue.replace(/\D/g, "").slice(0, 10);
     }
 
     const finalValue =
-      type === "checkbox"
-        ? checked
-        : type === "file"
-        ? e.target.multiple
-          ? files
-          : files[0]
-        : newValue;
-
+      type === "checkbox" ? checked : type === "file" ? e.target.multiple ? files  : files[0]  : newValue;
     setFormData((prev) => ({
       ...prev,
       [name]: finalValue,
@@ -62,12 +52,10 @@ const UserForm = ({
     for (const field of fields) {
       const val = formData[field.name];
       const key = field.name.toLowerCase();
-
       if (field.required && (val === undefined || val === "")) {
         alert(`Please fill in the required field: ${field.label}`);
         return false;
       }
-
       if (
         key.includes("name") &&
         !key.includes("username") &&
@@ -77,7 +65,6 @@ const UserForm = ({
         alert("Name fields must contain only letters and spaces.");
         return false;
       }
-
       if (
         ["phone", "mobile", "contact"].some((k) => key.includes(k)) &&
         val &&
@@ -92,14 +79,24 @@ const UserForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const filtered = Object.entries(formData).filter(
+      ([key]) => !["user_id", "_id", "id", "created_at", "updated_at"].includes(key)
+    );
+    const hasRealInput = filtered.some(
+      ([_, val]) => val !== undefined && String(val).trim() !== ""
+    );
+    console.log("Attempting submit. Form data:", formData);
+    if (!hasRealInput) {
+      console.warn("Submission blocked: No valid user-entered data.");
+      return;
+    }
     setSubmitting(true);
-
     if (!validate()) {
       setSubmitting(false);
       return;
     }
-
-    await onSubmit(formData); // Submit updated form
+    console.log("Submitting form data to parent:", formData);
+    await onSubmit(formData);
     setSubmitting(false);
   };
 

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./../CSS/AddModal.css";
 import FormRows from "./FormFields/FormRows";
-import { toast } from "react-toastify";
-
 
 const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "default" }) => {
   const [formData, setFormData] = useState({});
@@ -44,62 +42,75 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     }));
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSubmitting(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
 
-  // Validation checks
-  for (const field of fields) {
-    if (field.required && !formData[field.name]) {
-      alert(`Please fill in the required field: ${field.label}`);
-      setSubmitting(false);
-      return;
-    }
-  }
-
-  for (const key in formData) {
-    const value = formData[key];
-    const lowerKey = key.toLowerCase();
-
-    if (lowerKey.includes("name") && !lowerKey.includes("username") && !/^[A-Za-z\s]+$/.test(value)) {
-      alert("Name fields must contain only letters and spaces.");
-      setSubmitting(false);
-      return;
+    // Basic validation
+    for (const field of fields) {
+      if (field.required && !formData[field.name]) {
+        alert(`Please fill in the required field: ${field.label}`);
+        setSubmitting(false);
+        return;
+      }
     }
 
-    if (["phone", "mobile", "contact"].some((k) => lowerKey.includes(k)) && !/^\d{10}$/.test(value)) {
-      alert("Phone number must contain exactly 10 digits.");
-      setSubmitting(false);
-      return;
+    for (const key in formData) {
+      const value = formData[key];
+      const lowerKey = key.toLowerCase();
+
+      if (lowerKey.includes("name") && !lowerKey.includes("username") && !/^[A-Za-z\s]+$/.test(value)) {
+        alert("Name fields must contain only letters and spaces.");
+        setSubmitting(false);
+        return;
+      }
+
+      if (
+        ["phone", "mobile", "contact"].some((k) => lowerKey.includes(k)) &&
+        !/^\d{10}$/.test(value)
+      ) {
+        alert("Phone number must contain exactly 10 digits.");
+        setSubmitting(false);
+        return;
+      }
     }
-  }
 
-  try {
-    const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-if (result.success || result.status === "true") {
-  onSubmit(result.data || formData);
-  onClose(); // ✅ Close the modal automatically
-  window.location.reload(); // ✅ Reload to show the new user
-} else {
-  alert(result.message || "Failed to add user.");
-}
+      if (result.success || result.status === "true") {
+        const submittedData = result.data || formData;
 
-  } catch (error) {
-    console.error("Add user error:", error);
-    alert("Something went wrong while adding the user.");
-  } finally {
-    setSubmitting(false);
-  }
-};
+        const hasValidData = Object.values(submittedData).some(
+          (val) => val !== undefined && String(val).trim() !== ""
+        );
+
+        if (hasValidData && submittedData.user_name?.trim() !== "") {
+          onSubmit(submittedData);
+        } else {
+          console.warn("Skipping blank record submit");
+        }
+
+        onClose();
+        
+      } else {
+        alert(result.message || "Failed to add user.");
+      }
+    } catch (error) {
+      console.error("Add user error:", error);
+      alert("Something went wrong while adding the user.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -115,7 +126,9 @@ if (result.success || result.status === "true") {
         <form className="modal-form" onSubmit={handleSubmit}>
           <FormRows fields={fields} formData={formData} handleChange={handleChange} />
           <div className="modal-actions">
-            <button type="button" className="btn-close" onClick={onClose}>Close</button>
+            <button type="button" className="btn-close" onClick={onClose}>
+              Close
+            </button>
             <button type="submit" className="btn-submit" disabled={submitting}>
               {submitting ? "Submitting..." : "Submit"}
             </button>

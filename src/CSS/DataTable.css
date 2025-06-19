@@ -41,6 +41,9 @@
   width: 120px;
   gap: 6px;
 }
+.add-user-btn{
+  margin-right: 15px;
+}
 
 .datatable-add-btn:hover {
   background-color: #2f4dcf;
@@ -58,6 +61,7 @@
 .export-buttons {
   display: flex;
   gap: 6px;
+  margin-left: 15px;
 }
 
 .export-buttons button,
@@ -79,6 +83,7 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  margin-right: 15px;
 }
 
 .search-form label {

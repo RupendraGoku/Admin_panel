@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "./DataTable";
+import DataTable from "../Components/DataTable/DataTable";
 import "../CSS/DataTable.css";
 
 const userFields = [

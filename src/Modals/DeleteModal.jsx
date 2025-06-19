@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../CSS/AddModal.css";
-// import "../CSS/EditDelete.css";
 import { toast } from "react-toastify";
 
 

@@ -1,4 +1,4 @@
-import DataTable from "./DataTable";
+import DataTable from "./DataTable/DataTable";
 import "../CSS/DataTable.css";
 import "../CSS/product.css";
 
