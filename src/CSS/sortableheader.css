@@ -1,0 +1,37 @@
+.sortable-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable-header .label {
+  font-weight: bold;
+  margin-right: 0px;
+}
+
+.sortable-header .icons {
+  display: flex;
+  flex-direction: row; 
+  gap: 0px;
+  font-size: 0; 
+}
+
+.arrow-icon {
+  cursor: pointer;
+  font-size: 12px;
+  color: gray; 
+  transition: color 0.2s ease;
+}
+.arrow-icon.up {
+  transform: translateY(-2px); 
+}
+
+.arrow-icon.down {
+  transform: translateY(2px);
+}
+
+.arrow-icon.active {
+  color: black;
+}

@@ -1,6 +1,6 @@
-// components/DataTable/DataTableContent.jsx
 import React from "react";
 import DropdownActions from "./DropdownActions";
+import SortableHeader from "./SortableHeader";
 
 const DataTableContent = ({
   headers,
@@ -10,15 +10,33 @@ const DataTableContent = ({
   handleDeleteClick,
   dropdownIndex,
   handleDropdownToggle,
+  sortKey,
+  sortDirection,
+  handleSort
 }) => {
   return (
     <div className="datatable-table-container">
       <table className="datatable-table">
         <thead>
           <tr>
-            {headers.map((h, i) => (
-              <th key={i}>{h}</th>
-            ))}
+            {headers.map((h, i) => {
+              const key = headerKeyMap[h];
+              return (
+                <th key={i}>
+                  {key !== "action" ? (
+                    <SortableHeader
+                      label={h}
+                      sortKey={key}
+                      currentSortKey={sortKey}
+                      currentDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                  ) : (
+                    h
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>

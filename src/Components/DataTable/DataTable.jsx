@@ -26,6 +26,8 @@ const DataTable = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [dropdownIndex, setDropdownIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortKey, setSortKey] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
   const itemsPerPage = 7;
 
   const headerKeyMap = {
@@ -43,17 +45,32 @@ const DataTable = ({
     setTableData(data);
   }, [data]);
 
+  const handleSort = (key, direction) => {
+    setSortKey(key);
+    setSortDirection(direction);
+  };
+
   const filteredData = tableData.filter((item) =>
     Object.values(item).some((val) =>
       String(val).toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
-  const totalItems = filteredData.length;
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (!sortKey) return 0;
+    const aVal = a[sortKey];
+    const bVal = b[sortKey];
+
+    if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const totalItems = sortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
-  const paginatedData = filteredData.slice(startIdx, endIdx);
+  const paginatedData = sortedData.slice(startIdx, endIdx);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -116,7 +133,6 @@ const DataTable = ({
     setDropdownIndex((prev) => (prev === sno ? null : sno));
   };
 
-  // Only include exportable keys (exclude Action)
   const exportColumns = headers
     .filter((h) => headerKeyMap[h] !== "action")
     .map((h) => headerKeyMap[h]);
@@ -146,6 +162,9 @@ const DataTable = ({
           handleDeleteClick={handleDeleteClick}
           dropdownIndex={dropdownIndex}
           handleDropdownToggle={handleDropdownToggle}
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          handleSort={handleSort}
         />
 
         <DataTableFooter
