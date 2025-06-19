@@ -20,7 +20,7 @@
 
 .arrow-icon {
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   color: gray; 
   transition: color 0.2s ease;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { HiMiniArrowLongDown, HiMiniArrowLongUp } from "react-icons/hi2";
-import "../../CSS/Sortableheader.css";
+import "../../CSS/sortableheader.css";
 
 const SortableHeader = ({
   label,
