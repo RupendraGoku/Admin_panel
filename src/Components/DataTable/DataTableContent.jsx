@@ -85,9 +85,7 @@ const DataTableContent = ({
                     );
                   } else if (key === "user_role") {
                     return (
-                      <td key={idx}>
-                        {item[key] === "1"
-                          ? "Admin"
+                      <td key={idx}> {item[key] === "1" ? "Admin"
                           : item[key] === "2"
                           ? "User"
                           : item[key]}

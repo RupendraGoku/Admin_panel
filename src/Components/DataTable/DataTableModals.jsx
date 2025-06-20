@@ -42,8 +42,7 @@ const DataTableModals = ({
 
   if (mode === "delete") {
     return (
-      <DeleteModal
-        isOpen={true}
+      <DeleteModal  isOpen={true}
         onClose={onClose}
         title="Confirm Delete"
         data={selectedRow}

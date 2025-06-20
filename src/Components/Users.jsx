@@ -7,19 +7,18 @@ const userFields = [
   { label: "Email", name: "user_email", type: "email", required: true },
   {
     label: "Role",
-    name: "user_role",
+    name: "user_role",          
     type: "radio",
     required: true,
     fullWidth: true,
     options: [
       { value: "1", label: "Admin" },
       { value: "2", label: "User" },
-    ]
+    ],
   },
-  { label: "Phone", name: "user_phone", type: "text", required: true },     // ← Left
-  { label: "Username", name: "user_username", type: "text", required: true } // → Right
+  { label: "Phone", name: "user_phone", type: "text", required: true },
+  { label: "Username", name: "user_username", type: "text", required: true },
 ];
-
 
 
 const Users = () => {
@@ -37,7 +36,6 @@ const Users = () => {
     }
   };
 
-  // Convert backend status number to string label
   const getStatusLabel = (status) => {
     switch (status) {
       case "1":
@@ -49,16 +47,19 @@ const Users = () => {
     }
   };
 
-  const normalizeUser = (user, index) => ({
-    sno: index + 1,
-    user_id: user.user_id,
-    user_name: user.user_name || "-",
-    user_email: user.user_email || "-",
-    user_phone: user.user_phone || "-",
-    user_username: user.user_username || "-",
-    user_role: getRoleLabel(user.user_role),
-    user_status: getStatusLabel(user.user_status),
-  });
+const normalizeUser = (user, index) => ({
+  sno: index + 1,
+  user_id: user.user_id,
+  user_name: user.user_name || "-",
+  user_email: user.user_email || "-",
+  user_phone: user.user_phone || "-",
+  user_username: user.user_username || "-",
+  user_role: getRoleLabel(String(user.user_role)),
+  user_role_value: String(user.user_role),
+  user_status: getStatusLabel(String(user.user_status)),
+  user_status_value: String(user.user_status), // ✅ Add this
+});
+
 
   const fetchUsers = async () => {
     try {
@@ -82,6 +83,16 @@ const Users = () => {
     fetchUsers();
   }, [reload]);
 
+  const handleEditClick = (item) => {
+    setSelectedRow({
+      ...item,
+      user_role: item.user_role_edit || "1",  
+    });
+    setModalMode("edit");
+    setDropdownIndex(null);
+    setIsModalOpen(true);
+  };
+
   return (
     <DataTable
       title="Users Record"
@@ -93,6 +104,7 @@ const Users = () => {
       modalFields={userFields}
       reload={reload}
       setReload={setReload}
+      onEditClick={handleEditClick}  
     />
   );
 };

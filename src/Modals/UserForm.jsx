@@ -24,7 +24,12 @@ const UserForm = ({
       }
     });
 
-    setFormData(initData);
+   setFormData(
+  Object.fromEntries(
+    Object.entries(initData).map(([k, v]) => [k, typeof v === "number" ? String(v) : v])
+  )
+);
+
   }, [fields, initialData]);
 
   const handleChange = (e) => {

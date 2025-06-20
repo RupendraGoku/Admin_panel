@@ -7,7 +7,6 @@ const FormRows = ({ fields, formData, handleChange }) => {
 
   fields.forEach((field, index) => {
     if (field.fullWidth) {
-      // Push any existing 2-column row
       if (currentRow.length) {
         rows.push(
           <div className="input-row" key={`row-${index}-partial`}>
@@ -24,7 +23,6 @@ const FormRows = ({ fields, formData, handleChange }) => {
         currentRow = [];
       }
 
-      // Push full-width field in its own row
       rows.push(
         <div className="input-row full-width" key={`row-${index}-full`}>
           <InputGroup
@@ -36,6 +34,7 @@ const FormRows = ({ fields, formData, handleChange }) => {
         </div>
       );
     } else {
+      
       currentRow.push(field);
       if (currentRow.length === 2) {
         rows.push(
@@ -55,7 +54,6 @@ const FormRows = ({ fields, formData, handleChange }) => {
     }
   });
 
-  // Push final row if any remaining fields
   if (currentRow.length > 0) {
     rows.push(
       <div className="input-row" key="final-row">
