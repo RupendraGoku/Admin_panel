@@ -15,17 +15,19 @@ const DataTableModals = ({
 }) => {
   if (!isOpen) return null;
 
-  if (mode === "add") {
-    return (
-      <AddModal
-        isOpen={true}
-        onClose={onClose}
-        title={addBtnLabel}
-        fields={modalFields}
-        onSubmit={onSubmit}
-      />
-    );
-  }
+if (mode === "add") {
+  return (
+    <AddModal
+      isOpen={true}
+      onClose={onClose}
+      title={addBtnLabel}
+      fields={modalFields}
+      onSubmit={onSubmit}
+      existingUsers={selectedRow?.allUsers || []}
+    />
+  );
+}
+
 
   if (mode === "edit") {
     return (

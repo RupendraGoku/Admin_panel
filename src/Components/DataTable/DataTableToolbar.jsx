@@ -17,7 +17,6 @@ const DataTableToolbar = ({
           fileName="user_table"
         />
 
-        {/* Search Box */}
         <div className="search-form">
           <label htmlFor="searchInput">Search:</label>
           <input

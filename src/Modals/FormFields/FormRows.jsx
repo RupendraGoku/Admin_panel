@@ -1,23 +1,29 @@
 import InputGroup from "./InputGroup";
 import "../../CSS/AddModal.css";
 
-const FormRows = ({ fields, formData, handleChange }) => {
+const FormRows = ({ fields, formData, handleChange, validationErrors = {} }) => {
   const rows = [];
   let currentRow = [];
 
   fields.forEach((field, index) => {
+    const inputElement = (
+      <div className="input-with-error" key={field.name}>
+        <InputGroup
+          field={field}
+          value={formData[field.name]}
+          onChange={handleChange}
+        />
+        {validationErrors[field.name] && (
+          <div className="input-error">{validationErrors[field.name]}</div>
+        )}
+      </div>
+    );
+
     if (field.fullWidth) {
       if (currentRow.length) {
         rows.push(
           <div className="input-row" key={`row-${index}-partial`}>
-            {currentRow.map((f) => (
-              <InputGroup
-                key={f.name}
-                field={f}
-                value={formData[f.name]}
-                onChange={handleChange}
-              />
-            ))}
+            {currentRow}
           </div>
         );
         currentRow = [];
@@ -25,28 +31,15 @@ const FormRows = ({ fields, formData, handleChange }) => {
 
       rows.push(
         <div className="input-row full-width" key={`row-${index}-full`}>
-          <InputGroup
-            key={field.name}
-            field={field}
-            value={formData[field.name]}
-            onChange={handleChange}
-          />
+          {inputElement}
         </div>
       );
     } else {
-      
-      currentRow.push(field);
+      currentRow.push(inputElement);
       if (currentRow.length === 2) {
         rows.push(
           <div className="input-row" key={`row-${index}`}>
-            {currentRow.map((f) => (
-              <InputGroup
-                key={f.name}
-                field={f}
-                value={formData[f.name]}
-                onChange={handleChange}
-              />
-            ))}
+            {currentRow}
           </div>
         );
         currentRow = [];
@@ -57,14 +50,7 @@ const FormRows = ({ fields, formData, handleChange }) => {
   if (currentRow.length > 0) {
     rows.push(
       <div className="input-row" key="final-row">
-        {currentRow.map((f) => (
-          <InputGroup
-            key={f.name}
-            field={f}
-            value={formData[f.name]}
-            onChange={handleChange}
-          />
-        ))}
+        {currentRow}
       </div>
     );
   }

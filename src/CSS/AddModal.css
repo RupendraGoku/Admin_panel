@@ -132,6 +132,19 @@
   content: " *";
   color: red;
 }
+.input-with-error {
+  display: flex;
+  flex-direction: column;
+  flex: 1;               
+  min-width: 0;          
+  margin-right: 0px;   
+}
+
+.input-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
 
 /* Footer Buttons */
 .modal-actions {

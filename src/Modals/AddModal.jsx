@@ -2,9 +2,18 @@ import React, { useEffect, useState } from "react";
 import "./../CSS/AddModal.css";
 import FormRows from "./FormFields/FormRows";
 
-const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "default" }) => {
+const AddModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  title,
+  fields = [],
+  size = "default",
+  existingUsers = [],
+}) => {
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     const initialData = fields.reduce((acc, field) => {
@@ -36,6 +45,32 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
           : files[0]
         : newValue;
 
+    // Check for duplicates
+    let error = "";
+
+    if (name === "user_email") {
+      if (existingUsers.some((u) => u.user_email.toLowerCase() === finalValue.toLowerCase())) {
+        error = "Email already registered";
+      }
+    }
+
+    if (name === "user_phone") {
+      if (existingUsers.some((u) => u.user_phone === finalValue)) {
+        error = "Phone already registered";
+      }
+    }
+
+    if (name === "user_username") {
+      if (existingUsers.some((u) => u.user_username.toLowerCase() === finalValue.toLowerCase())) {
+        error = "Username already taken";
+      }
+    }
+
+    setValidationErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+
     setFormData((prev) => ({
       ...prev,
       [name]: finalValue,
@@ -46,7 +81,7 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
     e.preventDefault();
     setSubmitting(true);
 
-    // Basic validation
+    // Basic required field check
     for (const field of fields) {
       if (field.required && !formData[field.name]) {
         alert(`Please fill in the required field: ${field.label}`);
@@ -55,21 +90,10 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
       }
     }
 
-    for (const key in formData) {
-      const value = formData[key];
-      const lowerKey = key.toLowerCase();
-
-      if (lowerKey.includes("name") && !lowerKey.includes("username") && !/^[A-Za-z\s]+$/.test(value)) {
-        alert("Name fields must contain only letters and spaces.");
-        setSubmitting(false);
-        return;
-      }
-
-      if (
-        ["phone", "mobile", "contact"].some((k) => lowerKey.includes(k)) &&
-        !/^\d{10}$/.test(value)
-      ) {
-        alert("Phone number must contain exactly 10 digits.");
+    // Validation check
+    for (const key in validationErrors) {
+      if (validationErrors[key]) {
+        alert("Please enter new data.");
         setSubmitting(false);
         return;
       }
@@ -100,7 +124,6 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
         }
 
         onClose();
-        
       } else {
         alert(result.message || "Failed to add user.");
       }
@@ -124,7 +147,12 @@ const AddModal = ({ isOpen, onClose, onSubmit, title, fields = [], size = "defau
           </button>
         </div>
         <form className="modal-form" onSubmit={handleSubmit}>
-          <FormRows fields={fields} formData={formData} handleChange={handleChange} />
+          <FormRows
+            fields={fields}
+            formData={formData}
+            handleChange={handleChange}
+            validationErrors={validationErrors}
+          />
           <div className="modal-actions">
             <button type="button" className="btn-close" onClick={onClose}>
               Close

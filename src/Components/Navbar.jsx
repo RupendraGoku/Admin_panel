@@ -69,14 +69,6 @@ const Navbar = ({ collapsed }) => {
               {!collapsed && 'Product'}
             </NavLink>
           </li>
-          <li className="menu-item">
-            <NavLink
-              to="/test"
-              className={({ isActive }) => isActive ? 'active' : ''}
-            >
-              {!collapsed && 'test'}
-            </NavLink>
-          </li>
         </ul>
       </div>
     </div>

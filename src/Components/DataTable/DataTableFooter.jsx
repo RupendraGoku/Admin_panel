@@ -1,4 +1,3 @@
-// components/DataTable/DataTableFooter.jsx
 import React from "react";
 
 const DataTableFooter = ({

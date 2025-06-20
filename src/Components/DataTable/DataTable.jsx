@@ -28,7 +28,7 @@ const DataTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sortKey, setSortKey] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
-  const itemsPerPage = 7;
+  const itemsPerPage = 10;
 
   const headerKeyMap = {
     Sno: "sno",
@@ -77,17 +77,18 @@ const DataTable = ({
     setCurrentPage(page);
   };
 
-  const handleAddClick = () => {
-    setSelectedRow(null);
-    setModalMode("add");
-    setIsModalOpen(true);
-  };
+ const handleAddClick = () => {
+  setSelectedRow({ allUsers: data });
+  setModalMode("add");
+  setIsModalOpen(true);
+};
+
 
 const handleEditClick = (item) => {
   setSelectedRow({
     ...item,
     user_role: String(item.user_role_value ?? "1"),
-    user_status: String(item.user_status_value ?? "1"), // ✅ Ensure it's preserved
+    user_status: String(item.user_status_value ?? "1"), 
   });
   setModalMode("edit");
   setDropdownIndex(null);
