@@ -1,0 +1,17 @@
+.input-group select {
+  padding: 10px 14px;
+  /* border: 2px solid #ced4da; */
+  border-radius: 4px;
+  font-size: 14px;
+  color: #212529;
+  background-color: #f8f9fa;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  width: 48%;
+}
+.input-group label {
+  font-weight: 600; 
+}

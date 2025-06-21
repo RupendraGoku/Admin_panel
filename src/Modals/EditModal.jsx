@@ -10,7 +10,7 @@ const EditModal = ({ isOpen, onClose, onSubmit, title, fields = [], initialData 
       const response = await fetch("https://myworkstatus.in/ecom/api/user_update.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, user_id: initialData.user_id }), // ✅ ensure user_id sent
+        body: JSON.stringify({ ...formData, user_id: initialData.user_id }), 
       });
       const result = await response.json();
 
@@ -35,12 +35,25 @@ const EditModal = ({ isOpen, onClose, onSubmit, title, fields = [], initialData 
           <button className="modal-close" onClick={onClose}>&times;</button>
         </div>
         <UserForm
-          fields={fields}
-          initialData={initialData}
-          onSubmit={handleEdit}
-          onCancel={onClose}
-          submitLabel="Update User"
-        />
+  fields={[
+    ...fields,
+    {
+      label: "Status",
+      name: "user_status",
+      type: "select",
+      required: true,
+      options: [
+        { value: "1", label: "Active" },
+        { value: "0", label: "Deactive" },
+      ],
+    },
+  ]}
+  initialData={initialData}
+  onSubmit={handleEdit}
+  onCancel={onClose}
+  submitLabel="Update & Save "
+/>
+
       </div>
     </div>
   );

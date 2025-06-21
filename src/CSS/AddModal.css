@@ -40,7 +40,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .modal-header h3 {
@@ -128,10 +128,7 @@
   font-weight: 400;
 }
 
-.required::after {
-  content: " *";
-  color: red;
-}
+
 .input-with-error {
   display: flex;
   flex-direction: column;
@@ -280,6 +277,13 @@
   color: #333;
 }
 
+label.required::after {
+  content: "*";
+  color: #f06548;
+  margin-left: 0px;
+  font-weight:400;
+}
+
 .form-group input {
   padding: 8px;
   border: 1px solid #ccc;
@@ -311,12 +315,12 @@
 }
 
 .modal-actions button[type="submit"] {
-  background-color: #4b5fc1;
+  background-color: #425181;
   color: white;
 }
 
 .modal-actions button[type="submit"]:hover {
-  background-color: #3b4fb1;
+  background-color: #364574;
 }
 
 .modal-actions button[type="button"] {

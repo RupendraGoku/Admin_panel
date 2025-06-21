@@ -1,4 +1,3 @@
-// components/DataTable/DataTableModals.jsx
 import React from "react";
 import AddModal from "../../Modals/AddModal";
 import EditModal from "../../Modals/EditModal";
@@ -34,7 +33,7 @@ if (mode === "add") {
       <EditModal
         isOpen={true}
         onClose={onClose}
-        title="Edit User"
+        title="Update User"
         fields={modalFields}
         initialData={selectedRow}
         onSubmit={onSubmit}

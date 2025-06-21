@@ -21,7 +21,7 @@
 .arrow-icon {
   cursor: pointer;
   font-size: 14px;
-  color: gray; 
+  color: rgb(199, 193, 193); 
   transition: color 0.2s ease;
 }
 .arrow-icon.up {

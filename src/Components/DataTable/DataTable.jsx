@@ -41,6 +41,7 @@ const DataTable = ({
     Action: "action",
   };
 
+  
   useEffect(() => {
     setTableData(data);
   }, [data]);

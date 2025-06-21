@@ -1,23 +1,39 @@
 import InputGroup from "./InputGroup";
+import SelectGroup from "./SelectGroup";
 import "../../CSS/AddModal.css";
 
 const FormRows = ({ fields, formData, handleChange, validationErrors = {} }) => {
   const rows = [];
   let currentRow = [];
 
-  fields.forEach((field, index) => {
-    const inputElement = (
-      <div className="input-with-error" key={field.name}>
-        <InputGroup
+  const renderField = (field) => {
+    const error = validationErrors[field.name];
+    if (field.type === "select") {
+      return (
+        <SelectGroup
+          key={field.name}
           field={field}
           value={formData[field.name]}
           onChange={handleChange}
+          error={error}
         />
-        {validationErrors[field.name] && (
-          <div className="input-error">{validationErrors[field.name]}</div>
-        )}
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="input-with-error" key={field.name}>
+          <InputGroup
+            field={field}
+            value={formData[field.name]}
+            onChange={handleChange}
+          />
+          {error && <div className="input-error">{error}</div>}
+        </div>
+      );
+    }
+  };
+
+  fields.forEach((field, index) => {
+    const inputElement = renderField(field);
 
     if (field.fullWidth) {
       if (currentRow.length) {
@@ -28,7 +44,6 @@ const FormRows = ({ fields, formData, handleChange, validationErrors = {} }) => 
         );
         currentRow = [];
       }
-
       rows.push(
         <div className="input-row full-width" key={`row-${index}-full`}>
           {inputElement}
