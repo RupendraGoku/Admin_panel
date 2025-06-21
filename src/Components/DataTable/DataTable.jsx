@@ -88,13 +88,15 @@ const DataTable = ({
 const handleEditClick = (item) => {
   setSelectedRow({
     ...item,
+    allUsers: data, // ✅ So `existingUsers` becomes available to EditModal
     user_role: String(item.user_role_value ?? "1"),
-    user_status: String(item.user_status_value ?? "1"), 
+    user_status: String(item.user_status_value ?? "1"),
   });
   setModalMode("edit");
   setDropdownIndex(null);
   setIsModalOpen(true);
 };
+
 
 
 

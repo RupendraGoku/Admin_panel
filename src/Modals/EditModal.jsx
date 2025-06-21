@@ -2,7 +2,16 @@ import React from "react";
 import "../CSS/AddModal.css";
 import UserForm from "./UserForm.jsx";
 
-const EditModal = ({ isOpen, onClose, onSubmit, title, fields = [], initialData = {}, size = "default" }) => {
+const EditModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  title,
+  fields = [],
+  initialData = {},
+  size = "default",
+  existingUsers = [], // ✅ NEW
+}) => {
   if (!isOpen) return null;
 
   const handleEdit = async (formData) => {
@@ -10,14 +19,14 @@ const EditModal = ({ isOpen, onClose, onSubmit, title, fields = [], initialData 
       const response = await fetch("https://myworkstatus.in/ecom/api/user_update.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, user_id: initialData.user_id }), 
+        body: JSON.stringify({ ...formData, user_id: initialData.user_id }),
       });
       const result = await response.json();
 
       if (result.status === "true") {
         onSubmit(formData);
         onClose();
-         window.location.reload();
+        window.location.reload();
       } else {
         alert(result.message || "Update failed.");
       }
@@ -35,25 +44,26 @@ const EditModal = ({ isOpen, onClose, onSubmit, title, fields = [], initialData 
           <button className="modal-close" onClick={onClose}>&times;</button>
         </div>
         <UserForm
-  fields={[
-    ...fields,
-    {
-      label: "Status",
-      name: "user_status",
-      type: "select",
-      required: true,
-      options: [
-        { value: "1", label: "Active" },
-        { value: "0", label: "Deactive" },
-      ],
-    },
-  ]}
-  initialData={initialData}
-  onSubmit={handleEdit}
-  onCancel={onClose}
-  submitLabel="Update & Save "
-/>
-
+          fields={[
+            ...fields,
+            {
+              label: "Status",
+              name: "user_status",
+              type: "select",
+              required: true,
+              options: [
+                { value: "1", label: "Active" },
+                { value: "0", label: "Deactive" },
+              ],
+            },
+          ]}
+          initialData={initialData}
+          onSubmit={handleEdit}
+          onCancel={onClose}
+          submitLabel="Update & Save"
+          existingUsers={existingUsers} // ✅ NEW
+          currentUserId={initialData.user_id} // ✅ NEW
+        />
       </div>
     </div>
   );

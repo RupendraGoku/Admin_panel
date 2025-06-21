@@ -28,18 +28,20 @@ if (mode === "add") {
 }
 
 
-  if (mode === "edit") {
-    return (
-      <EditModal
-        isOpen={true}
-        onClose={onClose}
-        title="Update User"
-        fields={modalFields}
-        initialData={selectedRow}
-        onSubmit={onSubmit}
-      />
-    );
-  }
+ if (mode === "edit") {
+  return (
+    <EditModal
+      isOpen={true}
+      onClose={onClose}
+      title="Update User"
+      fields={modalFields}
+      initialData={selectedRow}
+      onSubmit={onSubmit}
+      existingUsers={selectedRow?.allUsers || []} // ✅ IMPORTANT FIX
+    />
+  );
+}
+
 
   if (mode === "delete") {
     return (

@@ -7,29 +7,28 @@ const UserForm = ({
   onSubmit,
   onCancel,
   submitLabel = "Submit",
+  existingUsers = [], // ✅ NEW
+  currentUserId = null, // ✅ NEW
 }) => {
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({}); // ✅ NEW
 
   useEffect(() => {
-    const initData = {
-      ...initialData,
-    };
+    const initData = { ...initialData };
 
     fields.forEach((field) => {
       if (!(field.name in initData)) {
         initData[field.name] =
-          field.defaultValue ??
-          (field.type === "radio" ? field.options?.[0]?.value : "");
+          field.defaultValue ?? (field.type === "radio" ? field.options?.[0]?.value : "");
       }
     });
 
-   setFormData(
-  Object.fromEntries(
-    Object.entries(initData).map(([k, v]) => [k, typeof v === "number" ? String(v) : v])
-  )
-);
-
+    setFormData(
+      Object.fromEntries(
+        Object.entries(initData).map(([k, v]) => [k, typeof v === "number" ? String(v) : v])
+      )
+    );
   }, [fields, initialData]);
 
   const handleChange = (e) => {
@@ -46,7 +45,49 @@ const UserForm = ({
     }
 
     const finalValue =
-      type === "checkbox" ? checked : type === "file" ? e.target.multiple ? files  : files[0]  : newValue;
+      type === "checkbox" ? checked : type === "file" ? (e.target.multiple ? files : files[0]) : newValue;
+
+    let error = "";
+
+    if (name === "user_email") {
+      if (
+        existingUsers.some(
+          (u) =>
+            u.user_email?.toLowerCase() === finalValue.toLowerCase() &&
+            u.user_id !== currentUserId
+        )
+      ) {
+        error = "Email already registered";
+      }
+    }
+
+    if (name === "user_phone") {
+      if (
+        existingUsers.some(
+          (u) => u.user_phone === finalValue && u.user_id !== currentUserId
+        )
+      ) {
+        error = "Phone already registered";
+      }
+    }
+
+    if (name === "user_username") {
+      if (
+        existingUsers.some(
+          (u) =>
+            u.user_username?.toLowerCase() === finalValue.toLowerCase() &&
+            u.user_id !== currentUserId
+        )
+      ) {
+        error = "Username already taken";
+      }
+    }
+
+    setValidationErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+
     setFormData((prev) => ({
       ...prev,
       [name]: finalValue,
@@ -79,6 +120,15 @@ const UserForm = ({
         return false;
       }
     }
+
+    // Submit-time duplicate validation
+    for (const key in validationErrors) {
+      if (validationErrors[key]) {
+        alert(validationErrors[key]);
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -90,17 +140,18 @@ const UserForm = ({
     const hasRealInput = filtered.some(
       ([_, val]) => val !== undefined && String(val).trim() !== ""
     );
-    console.log("Attempting submit. Form data:", formData);
+
     if (!hasRealInput) {
       console.warn("Submission blocked: No valid user-entered data.");
       return;
     }
+
     setSubmitting(true);
     if (!validate()) {
       setSubmitting(false);
       return;
     }
-    console.log("Submitting form data to parent:", formData);
+
     await onSubmit(formData);
     setSubmitting(false);
   };
@@ -111,6 +162,7 @@ const UserForm = ({
         fields={fields}
         formData={formData}
         handleChange={handleChange}
+        validationErrors={validationErrors}
       />
       <div className="modal-actions">
         <button type="button" className="btn-close" onClick={onCancel}>
