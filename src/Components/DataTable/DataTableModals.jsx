@@ -11,6 +11,7 @@ const DataTableModals = ({
   selectedRow,
   modalFields,
   addBtnLabel,
+  type
 }) => {
   if (!isOpen) return null;
 

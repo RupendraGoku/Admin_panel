@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import "./../CSS/AddModal.css";
 import FormRows from "./FormFields/FormRows";
-
+import  { useContext } from "react";
+import { ApiServiceContext } from "../context/Context";
 const AddModal = ({
   isOpen,
   onClose,
@@ -11,10 +12,12 @@ const AddModal = ({
   size = "default",
   existingUsers = [],
 }) => {
+  const { apiEndpoints ,type} = useContext(ApiServiceContext)
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
-
+  // console.log('THIS IS FILED',fields);
+  
   useEffect(() => {
     const initialData = fields.reduce((acc, field) => {
       acc[field.name] = field.defaultValue || (field.type === "radio" ? field.options?.[0]?.value : "");
@@ -79,6 +82,10 @@ const AddModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log('this is working');
+    console.log(formData);
+
+
     setSubmitting(true);
 
     // Basic required field check
@@ -100,7 +107,10 @@ const AddModal = ({
     }
 
     try {
-      const response = await fetch("https://myworkstatus.in/ecom/api/user_insert.php", {
+       const apiUrl = apiEndpoints[type]['insert']; 
+      //  console.log(apiUrl);
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -166,5 +176,4 @@ const AddModal = ({
     </div>
   );
 };
-
-export default AddModal;
+export default  AddModal;

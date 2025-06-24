@@ -14,6 +14,14 @@ const productData = [
   },
 ];
 
+const headerKeyMap = {
+  Sno: "sno",
+  Name: "brand_name",
+  Image: "brand_logo",
+  Status: "status",
+  Action: "action",
+};
+
 const productFields = [
   { name: "name", label: "Name", type: "text", placeholder: "Product Name", required: true },
   { name: "slug", label: "Slug", type: "text", placeholder: "Product Slug", required: true },
@@ -40,26 +48,7 @@ const Product = () => (
     headers={["Sno", "Name", "Category", "Brand", "Price", "Image", "Status", "Action"]}
     data={productData}
     cssClassPrefix="datatable"
-    renderRow={(item, i) => (
-      <tr key={i}>
-        <td>{item.sno}</td>
-        <td>{item.name}</td>
-        <td>{item.category}</td>
-        <td>{item.brand}</td>
-        <td>{item.price}</td>
-        <td>
-          <img src={item.image} alt={item.name} className="product-image" />
-        </td>
-        <td>
-          <span className={`status-badge ${item.status === "Active" ? "status-active" : "status-deactive"}`}>
-            {item.status}
-          </span>
-        </td>
-        <td>
-          <button className="action-btn">...</button>
-        </td>
-      </tr>
-    )}
+    headerKeyMap={headerKeyMap}
     modalFields={productFields}
   />
 );

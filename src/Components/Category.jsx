@@ -18,6 +18,14 @@ const categoryFields = [
   { name: "logo", label: "Logo/Image", type: "file", accept: ".jpg,.jpeg,.png" },
 ];
 
+const headerKeyMap = {
+  Sno: "sno",
+  Name: "brand_name",
+  Image: "brand_logo",
+  Status: "status",
+  Action: "action",
+};
+
 
 const Category = () => (
   <DataTable
@@ -27,24 +35,7 @@ const Category = () => (
     headers={["Sno", "Name", "Parent", "Image", "Status", "Action"]}
     data={categoryData}
     cssClassPrefix="datatable"
-    renderRow={(item, i) => (
-      <tr key={i}>
-        <td>{item.sno}</td>
-        <td>{item.name}</td>
-        <td>{item.parent}</td>
-        <td>
-          <img src={item.image} alt={item.name} className="category-image" />
-        </td>
-        <td>
-          <span className={`status-badge ${item.status === "Active" ? "status-active" : "status-deactive"}`}>
-            {item.status}
-          </span>
-        </td>
-        <td>
-          <button className="action-btn">...</button>
-        </td>
-      </tr>
-    )}
+    headerKeyMap={headerKeyMap}
     modalFields={categoryFields}
   />
 );

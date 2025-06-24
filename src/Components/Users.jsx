@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import DataTable from "../Components/DataTable/DataTable";
 import "../CSS/DataTable.css";
+import { ApiServiceContext } from "../context/Context";
 
 const userFields = [
   { label: "Name", name: "user_name", type: "text", required: true },
   { label: "Email", name: "user_email", type: "email", required: true },
   {
     label: "Role",
-    name: "user_role",          
+    name: "user_role",
     type: "radio",
     required: true,
     fullWidth: true,
@@ -24,6 +25,10 @@ const userFields = [
 const Users = () => {
   const [userData, setUserData] = useState([]);
   const [reload, setReload] = useState(false);
+   const { typeSetting } = useContext(ApiServiceContext)
+    useEffect(() => {
+    typeSetting('user');
+  }, [typeSetting]); 
 
   const getRoleLabel = (role) => {
     switch (role) {
@@ -47,20 +52,29 @@ const Users = () => {
     }
   };
 
-const normalizeUser = (user, index) => ({
-  sno: index + 1,
-  user_id: user.user_id,
-  user_name: user.user_name || "-",
-  user_email: user.user_email || "-",
-  user_phone: user.user_phone || "-",
-  user_username: user.user_username || "-",
-  user_role: getRoleLabel(String(user.user_role)),
-  user_role_value: String(user.user_role),
-  user_status: getStatusLabel(String(user.user_status)),
-  user_status_value: String(user.user_status), // ✅ Add this
-});
+  const normalizeUser = (user, index) => ({
+    sno: index + 1,
+    user_id: user.user_id,
+    user_name: user.user_name || "-",
+    user_email: user.user_email || "-",
+    user_phone: user.user_phone || "-",
+    user_username: user.user_username || "-",
+    user_role: getRoleLabel(String(user.user_role)),
+    user_role_value: String(user.user_role),
+    status: getStatusLabel(String(user.user_status)),
+    user_status_value: String(user.user_status), // ✅ Add this
+  });
 
-
+  const headerKeyMap = {
+    Sno: "sno",
+    Name: "user_name",
+    Email: "user_email",
+    Phone: "user_phone",
+    Username: "user_username",
+    Role: "user_role",
+    Status: "status",
+    Action: "action",
+  };
   const fetchUsers = async () => {
     try {
       const res = await fetch("https://myworkstatus.in/ecom/api/user_record.php");
@@ -86,7 +100,7 @@ const normalizeUser = (user, index) => ({
   const handleEditClick = (item) => {
     setSelectedRow({
       ...item,
-      user_role: item.user_role_edit || "1",  
+      user_role: item.user_role_edit || "1",
     });
     setModalMode("edit");
     setDropdownIndex(null);
@@ -104,7 +118,8 @@ const normalizeUser = (user, index) => ({
       modalFields={userFields}
       reload={reload}
       setReload={setReload}
-      onEditClick={handleEditClick}  
+      onEditClick={handleEditClick}
+      headerKeyMap={headerKeyMap}
     />
   );
 };

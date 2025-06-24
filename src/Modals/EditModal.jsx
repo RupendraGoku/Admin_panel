@@ -1,6 +1,8 @@
 import React from "react";
 import "../CSS/AddModal.css";
 import UserForm from "./UserForm.jsx";
+import { useContext } from "react";
+import { ApiServiceContext } from "../context/Context";
 
 const EditModal = ({
   isOpen,
@@ -12,11 +14,13 @@ const EditModal = ({
   size = "default",
   existingUsers = [], // ✅ NEW
 }) => {
+  const { apiEndpoints,type } = useContext(ApiServiceContext)
   if (!isOpen) return null;
 
   const handleEdit = async (formData) => {
     try {
-      const response = await fetch("https://myworkstatus.in/ecom/api/user_update.php", {
+      const apiUrl = apiEndpoints[type]['update'];
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, user_id: initialData.user_id }),

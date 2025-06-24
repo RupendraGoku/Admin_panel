@@ -8,6 +8,7 @@ import DataTableFooter from "./DataTableFooter";
 import DataTableModals from "./DataTableModals";
 import { toast } from "react-toastify";
 
+
 const DataTable = ({
   title,
   addBtnLabel,
@@ -18,6 +19,7 @@ const DataTable = ({
   modalFields = [],
   reload,
   setReload,
+  headerKeyMap,
 }) => {
   const [tableData, setTableData] = useState(data);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,18 +32,9 @@ const DataTable = ({
   const [sortDirection, setSortDirection] = useState("asc");
   const itemsPerPage = 10;
 
-  const headerKeyMap = {
-    Sno: "sno",
-    Name: "user_name",
-    Email: "user_email",
-    Phone: "user_phone",
-    Username: "user_username",
-    Role: "user_role",
-    Status: "user_status",
-    Action: "action",
-  };
 
-  
+
+
   useEffect(() => {
     setTableData(data);
   }, [data]);
@@ -78,34 +71,31 @@ const DataTable = ({
     setCurrentPage(page);
   };
 
- const handleAddClick = () => {
-  setSelectedRow({ allUsers: data });
-  setModalMode("add");
-  setIsModalOpen(true);
-};
+  const handleAddClick = () => {
+    setSelectedRow({ allUsers: data });
+    setModalMode("add");
+    setIsModalOpen(true);
+    
+  };
 
 
-const handleEditClick = (item) => {
-  setSelectedRow({
-    ...item,
-    allUsers: data, // ✅ So `existingUsers` becomes available to EditModal
-    user_role: String(item.user_role_value ?? "1"),
-    user_status: String(item.user_status_value ?? "1"),
-  });
-  setModalMode("edit");
-  setDropdownIndex(null);
-  setIsModalOpen(true);
-};
-
-
-
-
-
-  const handleDeleteClick = (item) => {
+  const handleEditClick = (item) => {
+    setSelectedRow({
+      ...item,
+      allUsers: data, // ✅ So `existingUsers` becomes available to EditModal
+      user_role: String(item.user_role_value ?? "1"),
+      user_status: String(item.user_status_value ?? "1"),
+    });
+    setModalMode("edit");
+    setDropdownIndex(null);
+    setIsModalOpen(true);
+  };
+  const handleDeleteClick = (item) => {    
     setSelectedRow(item);
     setModalMode("delete");
     setDropdownIndex(null);
     setIsModalOpen(true);
+
   };
 
   const handleModalClose = () => {
@@ -151,14 +141,15 @@ const handleEditClick = (item) => {
   return (
     <div className={`${cssClassPrefix}-wrapper`}>
       <div className="table-container">
-        <DataTableHeader  title={title}
+        <DataTableHeader
+          title={title}
           addBtnLabel={addBtnLabel}
           addBtnIcon={addBtnIcon}
           onAddClick={handleAddClick}
         />
 
         <DataTableToolbar
-  searchQuery={searchQuery}
+          searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           exportData={filteredData}
           exportColumns={exportColumns}
