@@ -21,20 +21,7 @@ export const ApiServiceProvider = ({ children }) => {
     
   };
   const[type,setType] = useState('');
-  // Generic API Caller
-  // const performApiRequest = async ({ url, method = 'POST', data = {} }) => {
-  //   try {
-  //     const response = await axios({
-  //       method,
-  //       url,
-  //       data,
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error during ${method} request to ${url}:`, error);
-  //     throw error;
-  //   }
-  // };
+
   const typeSetting = (value)=>{
     setType(value)
   }

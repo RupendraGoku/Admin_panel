@@ -8,7 +8,6 @@ import DataTableFooter from "./DataTableFooter";
 import DataTableModals from "./DataTableModals";
 import { toast } from "react-toastify";
 
-
 const DataTable = ({
   title,
   addBtnLabel,
@@ -20,6 +19,7 @@ const DataTable = ({
   reload,
   setReload,
   headerKeyMap,
+  type = "user" // 'user' | 'brand' | 'category'
 }) => {
   const [tableData, setTableData] = useState(data);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,9 +31,6 @@ const DataTable = ({
   const [sortKey, setSortKey] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const itemsPerPage = 10;
-
-
-
 
   useEffect(() => {
     setTableData(data);
@@ -54,7 +51,6 @@ const DataTable = ({
     if (!sortKey) return 0;
     const aVal = a[sortKey];
     const bVal = b[sortKey];
-
     if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
     if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
     return 0;
@@ -75,27 +71,31 @@ const DataTable = ({
     setSelectedRow({ allUsers: data });
     setModalMode("add");
     setIsModalOpen(true);
-    
   };
 
-
   const handleEditClick = (item) => {
+    const roleKey = `${type}_role`;
+    const roleValueKey = `${type}_role_value`;
+    const statusKey = `${type}_status`;
+    const statusValueKey = `${type}_status_value`;
+
     setSelectedRow({
       ...item,
-      allUsers: data, // ✅ So `existingUsers` becomes available to EditModal
-      user_role: String(item.user_role_value ?? "1"),
-      user_status: String(item.user_status_value ?? "1"),
+      allUsers: data,
+      [roleKey]: String(item[roleValueKey] ?? "1"),
+      [statusKey]: String(item[statusValueKey] ?? "1"),
     });
+
     setModalMode("edit");
     setDropdownIndex(null);
     setIsModalOpen(true);
   };
-  const handleDeleteClick = (item) => {    
+
+  const handleDeleteClick = (item) => {
     setSelectedRow(item);
     setModalMode("delete");
     setDropdownIndex(null);
     setIsModalOpen(true);
-
   };
 
   const handleModalClose = () => {
@@ -117,13 +117,11 @@ const DataTable = ({
       return;
     }
 
-    if (modalMode === "add") {
-      toast.success("User Added Successfully");
-    } else if (modalMode === "edit") {
-      toast.success("User Updated Successfully");
-    } else if (modalMode === "delete") {
-      toast.success("User Deleted Successfully");
-    }
+    toast.success(
+      `Successfully ${
+        modalMode === "edit" ? "Updated" : modalMode === "add" ? "Added" : "Deleted"
+      }`
+    );
 
     setReload(!reload);
     setIsModalOpen(false);
@@ -166,11 +164,12 @@ const DataTable = ({
           sortKey={sortKey}
           sortDirection={sortDirection}
           handleSort={handleSort}
+          type={type}
         />
 
         <DataTableFooter
           startIdx={startIdx}
-          endIdx={endIdx}
+          endIdx={Math.min(endIdx, totalItems)}
           totalItems={totalItems}
           currentPage={currentPage}
           totalPages={totalPages}
@@ -186,6 +185,7 @@ const DataTable = ({
         selectedRow={selectedRow}
         modalFields={modalFields}
         addBtnLabel={addBtnLabel}
+        type={type}
       />
     </div>
   );

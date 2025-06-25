@@ -1,4 +1,3 @@
-
 import DropdownActions from "./DropdownActions";
 import SortableHeader from "./SortableHeader";
 
@@ -12,40 +11,30 @@ const DataTableContent = ({
   handleDropdownToggle,
   sortKey,
   sortDirection,
-  handleSort
+  handleSort,
+  type = "user", // 'user' | 'brand' | 'category'
 }) => {
-  // Filter out empty/invalid data items
-  const validData = data.filter(item => {
-    // Check if item exists and has at least one valid property
-    if (!item || typeof item !== 'object') return false;
-    
-    // Get all non-action keys
-    const dataKeys = headers
-      .map(header => headerKeyMap[header])
-      .filter(key => key && key !== "action");
-    
-    // Check if item has meaningful data in key fields
-    // For your case, let's require at least a valid name
-    const nameKey = dataKeys.find(key => key.toLowerCase().includes('name'));
-    if (nameKey) {
-      const nameValue = item[nameKey];
-      // If name is empty, null, undefined, or just whitespace, filter it out
-      if (!nameValue || String(nameValue).trim() === "" || String(nameValue).trim() === "-") {
-        return false;
-      }
-    }
-    
-    // Additional check: item should have at least 2 meaningful values
-    const meaningfulValues = dataKeys.filter(key => {
-      const value = item[key];
-      return value !== null && 
-             value !== undefined && 
-             String(value).trim() !== "" && 
-             String(value).trim() !== "-";
-    });
-    
-    return meaningfulValues.length >= 1; // At least 1 meaningful value (excluding action)
+  const validData = data.filter((item) => {
+    if (!item || typeof item !== "object") return false;
+    const nameKey = Object.keys(item).find((key) =>
+      key.toLowerCase().includes("name")
+    );
+    return nameKey && item[nameKey] && item[nameKey] !== "-";
   });
+
+  const getImagePath = (key, value) => {
+    if (!value || value === "-") return null;
+
+    if (type === "brand" && key === "brand_logo") {
+      return `https://myworkstatus.in/ecom/assets/uploads/brand/${value}`;
+    }
+
+    if (type === "category" && key === "image") {
+      return `https://myworkstatus.in/ecom/assets/uploads/category/${value}`;
+    }
+
+    return value;
+  };
 
   return (
     <div className="datatable-table-container">
@@ -84,18 +73,17 @@ const DataTableContent = ({
               <tr key={item.sno || item.id || i}>
                 {headers.map((header, idx) => {
                   const key = headerKeyMap[header];
-                  
-                  // Handle serial number display
-                  if (key === "sno" || key === "serial" || header.toLowerCase() === "sno") {
-                    return <td key={idx}>{i + 1}</td>;
-                  }
-                  
+
+                  if (key === "sno") return <td key={idx}>{i + 1}</td>;
+
                   if (key === "action") {
                     return (
                       <td key={idx} className="action-col">
                         <button
                           className="action-btn"
-                          onClick={() => handleDropdownToggle(item.sno || item.id)}
+                          onClick={() =>
+                            handleDropdownToggle(item.sno || item.id)
+                          }
                         >
                           ...
                         </button>
@@ -107,46 +95,55 @@ const DataTableContent = ({
                         )}
                       </td>
                     );
-                  } else if (key === "status") {
+                  }
+
+                  if (key === "status") {
                     const status = item[key];
                     return (
                       <td key={idx}>
                         <span
                           className={`status-badge ${
-                            status === "Active" ? "status-active" : "status-deactive"
+                            status === "Active"
+                              ? "status-active"
+                              : "status-deactive"
                           }`}
                         >
-                          {status === "Active" ? "Active" : "Inactive"}
+                          {status}
                         </span>
                       </td>
                     );
-                  } else if (key === "image") {
-                    const imageSrc = item[key];
+                  }
+
+                  if (key === "image" || key === "brand_logo") {
+                    const imageSrc = getImagePath(key, item[key]);
                     return (
                       <td key={idx}>
                         {imageSrc ? (
                           <img
-                            src={`https://myworkstatus.in/ecom/assets/uploads/brand/${imageSrc}`}
-                            alt={item.name || "Image"}
-                            style={{ width: "60px", height: "60px", objectFit: "cover" }}
-                            onError={(e) => {
-                              e.target.style.display = 'none';
+                            src={imageSrc}
+                            alt={
+                              type === "brand"
+                                ? "Brand Logo"
+                                : type === "category"
+                                ? "Category Image"
+                                : "Image"
+                            }
+                            style={{
+                              width: "60px",
+                              height: "60px",
+                              objectFit: "cover",
+                              borderRadius: "6px",
                             }}
+                            onError={(e) => (e.target.style.display = "none")}
                           />
                         ) : (
                           <span>No image</span>
                         )}
                       </td>
                     );
-                  } else {
-                    // Handle missing keys or undefined values
-                    const value = item[key];
-                    return (
-                      <td key={idx}>
-                        {value !== null && value !== undefined ? String(value) : "-"}
-                      </td>
-                    );
                   }
+
+                  return <td key={idx}>{item[key] ?? "-"}</td>;
                 })}
               </tr>
             ))
