@@ -11,13 +11,14 @@ const CategoryForm = ({
   const [formData, setFormData] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
+  // useEffect that tracks stable stringified versions to avoid infinite loop
   useEffect(() => {
     const init = {};
     fields.forEach((field) => {
       init[field.name] = initialData[field.name] || field.defaultValue || "";
     });
     setFormData(init);
-  }, [fields, initialData]);
+  }, [JSON.stringify(fields), JSON.stringify(initialData)]); // ✅ safe dependencies
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,9 +61,15 @@ const CategoryForm = ({
 
   return (
     <form className="modal-form" onSubmit={handleSubmit}>
-      <CategoryFormRows fields={fields} formData={formData} handleChange={handleChange} />
+      <CategoryFormRows
+        fields={fields}
+        formData={formData}
+        handleChange={handleChange}
+      />
       <div className="modal-actions">
-        <button type="button" className="btn-close" onClick={onCancel}>Cancel</button>
+        <button type="button" className="btn-close" onClick={onCancel}>
+          Cancel
+        </button>
         <button type="submit" className="btn-submit" disabled={submitting}>
           {submitting ? "Saving..." : submitLabel}
         </button>

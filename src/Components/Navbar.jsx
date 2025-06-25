@@ -42,6 +42,15 @@ const Navbar = ({ collapsed }) => {
               {!collapsed && 'Users'}
             </NavLink>
           </li>
+           <li className="menu-item">
+            <NavLink
+              to="/customer"
+              className={({ isActive }) => isActive ? 'active' : ''}
+            >
+              <span className="icon"><FaRegUserCircle /></span>
+              {!collapsed && 'Customer'}
+            </NavLink>
+          </li>
           <li className="menu-item">
             <NavLink
               to="/brands"

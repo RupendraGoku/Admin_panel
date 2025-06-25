@@ -4,35 +4,6 @@ import "../CSS/DataTable.css";
 import "../CSS/Category.css";
 import { ApiServiceContext } from "../context/Context";
 
-const categoryFields = [
-  {
-    name: "pcat_name",
-    label: "Name",
-    type: "text",
-    placeholder: "Category Name",
-    required: true,
-  },
-  {
-    name: "pcat_parentcat",
-    label: "Parent Category",
-    type: "select",
-    options: [
-      { label: "None", value: "" },
-      { label: "Electronics", value: "Electronics" },
-      { label: "Fashion", value: "Fashion" },
-      { label: "Grocery", value: "Grocery" },
-    ],
-    required: false,
-  },
-  {
-    name: "pcat_image",
-    label: "Logo/Image",
-    type: "file",
-    accept: ".jpg,.jpeg,.png",
-    required: false,
-  },
-];
-
 const getStatusLabel = (status) => {
   switch (status) {
     case "1":
@@ -43,16 +14,6 @@ const getStatusLabel = (status) => {
       return "-";
   }
 };
-
-const normalizeCategory = (category, index) => ({
-  sno: index + 1,
-  pcat_id: category.pcat_id,
-  name: category.pcat_name || "-",
-  parent: category.pcat_parentcat || "-",
-  image: category.pcat_image || "-", // Ensures empty string is handled as "-"
-  status: getStatusLabel(category.pcat_status),
-  status_value: category.pcat_status,
-});
 
 const headerKeyMap = {
   Sno: "sno",
@@ -72,6 +33,7 @@ const Category = () => {
   const [dropdownIndex, setDropdownIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [parentOptions, setParentOptions] = useState([]);
   const { typeSetting } = useContext(ApiServiceContext);
 
   useEffect(() => {
@@ -84,14 +46,35 @@ const Category = () => {
       const data = await res.json();
 
       if (Array.isArray(data)) {
-        const normalized = data.map(normalizeCategory).filter(Boolean);
+        // Create map of ID → name
+        const idToNameMap = {};
+        const options = [{ label: "None", value: "" }];
+
+        data.forEach((cat) => {
+          idToNameMap[cat.pcat_id] = cat.pcat_name;
+          options.push({ label: cat.pcat_name, value: cat.pcat_id });
+        });
+
+        const normalized = data.map((category, index) => ({
+          sno: index + 1,
+          pcat_id: category.pcat_id,
+          name: category.pcat_name || "-",
+          parent: idToNameMap[category.pcat_parentcat] || "None",
+          image: category.pcat_image || "Not Uploaded",
+          status: getStatusLabel(category.pcat_status),
+          status_value: category.pcat_status,
+        }));
+
         setCategoryData(normalized);
+        setParentOptions(options); // ✅ dynamic dropdown options
       } else {
         setCategoryData([]);
+        setParentOptions([{ label: "None", value: "" }]);
       }
     } catch (error) {
       console.error("Error fetching category data:", error);
       setCategoryData([]);
+      setParentOptions([{ label: "None", value: "" }]);
     }
   };
 
@@ -105,6 +88,31 @@ const Category = () => {
     setDropdownIndex(null);
     setIsModalOpen(true);
   };
+
+  // ✅ Now build fields dynamically with parentOptions
+  const categoryFields = [
+    {
+      name: "pcat_name",
+      label: "Name",
+      type: "text",
+      placeholder: "Category Name",
+      required: true,
+    },
+    {
+      name: "pcat_parentcat",
+      label: "Parent Category",
+      type: "select",
+      options: parentOptions,
+      required: false,
+    },
+    {
+      name: "pcat_image",
+      label: "Logo/Image",
+      type: "file",
+      accept: ".jpg,.jpeg,.png",
+      required: false,
+    },
+  ];
 
   return (
     <DataTable

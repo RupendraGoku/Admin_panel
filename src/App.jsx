@@ -7,6 +7,7 @@ import Product from './Components/Product';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Components/Home';
 import Layout from './Layout';
+import Customer from './Components/Customer';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
              <Route path='brands' element={<Brands/>}/>
             <Route path='category' element={<Category/>}/>
             <Route path='users' element={<Users/>}/>
+            <Route path='customer' element={<Customer/>}/>
             <Route path='product' element={<Product/>}/>
             </Route>
           </Routes>

@@ -26,11 +26,11 @@ const DataTableContent = ({
     if (!value || value === "-") return null;
 
     if (type === "brand" && key === "brand_logo") {
-      return `https://myworkstatus.in/ecom/assets/uploads/brand/${value}`;
+      return `https://myworkstatus.in/ecom/admin/images/brand/${value}`;
     }
 
     if (type === "category" && key === "image") {
-      return `https://myworkstatus.in/ecom/assets/uploads/category/${value}`;
+      return `https://myworkstatus.in/ecom/admin/images/category/${value}`;
     }
 
     return value;

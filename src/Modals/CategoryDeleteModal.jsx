@@ -10,7 +10,7 @@ const CategoryDeleteModal = ({
 }) => {
   const [deleting, setDeleting] = useState(false);
 
-  if (!isOpen || !data?.category_id) return null;
+  if (!isOpen || !data?.pcat_id) return null;
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -18,10 +18,11 @@ const CategoryDeleteModal = ({
       const response = await fetch("https://myworkstatus.in/ecom/api/product_category_delete.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category_id: data.category_id }),
+        body: JSON.stringify({ pcat_id: data.pcat_id }), // ✅ use correct field name
       });
 
       const result = await response.json();
+
       if (result.success || result.status === "true") {
         onDelete();
         onClose();
@@ -41,7 +42,7 @@ const CategoryDeleteModal = ({
     <div className="modal-overlay">
       <div className="modal delete-modal">
         <h3>{title}</h3>
-        <p>Are you sure you want to delete <strong>{data?.category_name}</strong>?</p>
+        <p>Are you sure you want to delete <strong>{data?.pcat_name || "this category"}</strong>?</p>
         <div className="modal-actions">
           <button className="btn delete-btn" onClick={handleDelete} disabled={deleting}>
             {deleting ? "Deleting..." : "Yes, Delete"}
