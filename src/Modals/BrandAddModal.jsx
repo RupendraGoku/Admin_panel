@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import "./../CSS/AddModal.css";
+// import "./../CSS/AddModal.css";
+import "../CSS/BrandModal.css";
 import BrandFormRows from "../Modals/FormFields/BrandFormRow";
 import { ApiServiceContext } from "../context/Context";
 

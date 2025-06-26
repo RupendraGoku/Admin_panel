@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import "../CSS/AddModal.css";
+// import "../CSS/AddModal.css";
+import "../CSS/BrandModal.css";
 import BrandForm from "./BrandForm";
 import { ApiServiceContext } from "../context/Context";
 
@@ -42,7 +43,7 @@ const BrandEditModal = ({
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay brand-modal">
       <div className={`modal-container ${size === "large" ? "large" : "small"}`}>
         <div className="modal-header">
           <h3>{title}</h3>
