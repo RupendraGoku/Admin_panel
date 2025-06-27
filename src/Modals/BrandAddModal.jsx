@@ -50,41 +50,54 @@ const BrandAddModal = ({
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    for (const field of fields) {
-      if (field.required && !formData[field.name]) {
-        alert(`Please fill in the required field: ${field.label}`);
-        return;
+  for (const field of fields) {
+    if (field.required && !formData[field.name]) {
+      alert(`Please fill in the required field: ${field.label}`);
+      return;
+    }
+  }
+
+  try {
+    const apiUrl = apiEndpoints["brand"]["insert"];
+
+    const formPayload = new FormData();
+    for (const key in formData) {
+      const value = formData[key];
+      if (value instanceof File || typeof value === "string" || typeof value === "boolean") {
+        formPayload.append(key, value);
       }
     }
 
-    try {
-      const apiUrl = apiEndpoints["brand"]["insert"];
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      body: formPayload, 
+    });
 
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+const text = await response.text();
+console.log("Raw response from API:", text);
 
-      const result = await response.json();
+let result;
+try {
+  result = JSON.parse(text);
+} catch (err) {
+  throw new Error("Invalid JSON response from API:\n" + text);
+}
 
-      if (result.success || result.status === "true") {
-        onSubmit(result.data || formData);
-        onClose();
-      } else {
-        alert(result.message || "Failed to add brand.");
-      }
-    } catch (error) {
-      console.error("Add brand error:", error);
-      alert("Something went wrong while adding the brand.");
-    } finally {
-      setSubmitting(false);
+    if (result.success || result.status === "true") {
+      onSubmit(result.data || formData);
+      onClose();
+    } else {
+      alert(result.message || "Failed to add brand.");
     }
-  };
+  } catch (error) {
+    console.error("Add brand error:", error);
+    alert("Something went wrong while adding the brand.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   if (!isOpen) return null;
 

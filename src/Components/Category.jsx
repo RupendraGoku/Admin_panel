@@ -89,7 +89,6 @@ const Category = () => {
     setIsModalOpen(true);
   };
 
-  // ✅ Now build fields dynamically with parentOptions
   const categoryFields = [
     {
       name: "pcat_name",
@@ -97,6 +96,7 @@ const Category = () => {
       type: "text",
       placeholder: "Category Name",
       required: true,
+       fullWidth: true, // ✅ Must be present
     },
     {
       name: "pcat_parentcat",

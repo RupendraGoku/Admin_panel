@@ -1,32 +1,45 @@
 import InputGroup from "./InputGroup";
 import SelectGroup from "./SelectGroup";
-import "../../CSS/AddModal.css";
+import "../../CSS/BrandModal.css"; // Or use AddModal.css if generalized
 
 const CategoryFormRows = ({ fields = [], formData = {}, handleChange }) => {
   const rows = [];
   let currentRow = [];
 
   const renderField = (field) => {
-    if (field.type === "select") {
-      return (
-        <SelectGroup
-          key={field.name}
-          field={field}
-          value={formData[field.name]}
-          onChange={handleChange}
-        />
-      );
-    } else {
-      return (
-        <div className="input-with-error" key={field.name}>
-          <InputGroup
-            field={field}
-            value={formData[field.name]}
-            onChange={handleChange}
-          />
-        </div>
-      );
-    }
+    const inputClass = field.fullWidth ? "input-group full-width" : "input-group";
+    const isImageField =
+      field.name.toLowerCase().includes("logo") || field.name.toLowerCase().includes("image");
+    const value = formData[field.name];
+
+    return (
+      <div className={inputClass} key={field.name}>
+        {field.type === "select" ? (
+          <SelectGroup field={field} value={value} onChange={handleChange} />
+        ) : (
+          <InputGroup field={field} value={value} onChange={handleChange} />
+        )}
+
+        {isImageField && (
+          <>
+            <small>Only JPG, PNG, JPEG file allowed.</small>
+            {value && typeof value === "string" && (
+              <img
+                src={`https://myworkstatus.in/ecom/admin/images/category/${value}`}
+                alt="Preview"
+                style={{
+                  marginTop: "10px",
+                  maxHeight: "100px",
+                  objectFit: "contain",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                }}
+              />
+            )}
+          </>
+        )}
+      </div>
+    );
   };
 
   fields.forEach((field, index) => {
@@ -35,14 +48,14 @@ const CategoryFormRows = ({ fields = [], formData = {}, handleChange }) => {
     if (field.fullWidth) {
       if (currentRow.length) {
         rows.push(
-          <div className="input-row" key={`row-${index}-partial`}>
+          <div className="brand-input-row" key={`row-${index}-partial`}>
             {currentRow}
           </div>
         );
         currentRow = [];
       }
       rows.push(
-        <div className="input-row full-width" key={`row-${index}-full`}>
+        <div className="brand-input-row full-width" key={`row-${index}-full`}>
           {inputElement}
         </div>
       );
@@ -50,7 +63,7 @@ const CategoryFormRows = ({ fields = [], formData = {}, handleChange }) => {
       currentRow.push(inputElement);
       if (currentRow.length === 2) {
         rows.push(
-          <div className="input-row" key={`row-${index}`}>
+          <div className="brand-input-row" key={`row-${index}`}>
             {currentRow}
           </div>
         );
@@ -61,7 +74,7 @@ const CategoryFormRows = ({ fields = [], formData = {}, handleChange }) => {
 
   if (currentRow.length > 0) {
     rows.push(
-      <div className="input-row" key="final-row">
+      <div className="brand-input-row" key="final-row">
         {currentRow}
       </div>
     );
